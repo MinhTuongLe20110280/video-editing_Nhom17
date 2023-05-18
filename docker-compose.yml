@@ -4,7 +4,7 @@ services:
     container_name: video-analysis
     image: video-analysis
     build:
-      context: ./client
+      context: ./FClient/client
       target: production
     ports:
       - "5002:80"
