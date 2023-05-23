@@ -23,8 +23,10 @@ jobs:
           DOCKERHUB_PASSWORD: 109339Lam@
         run: |
           cd client/client
+          npm cache clean --force
           npm install --legacy-peer-deps
-          npm i chart.js
+          npm i chart.js --force
+          npm run build
           docker build -t ${{ env.DOCKERHUB_USERNAME }}/frontend:latest .
           docker login -u ${{ env.DOCKERHUB_USERNAME }} -p ${{ env.DOCKERHUB_PASSWORD }}
           docker push ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
