@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { FileUploader } from "react-drag-drop-files";
 import TableTournament from "./TableTournament";
 
-const Tournament = () => {
+const MatchManagement = () => {
   const [opendialog, setOpenDialog] = useState(false);
   const [matches, setMatches] = useState([]);
   const [tournaments, setTournaments] = useState([]);
@@ -37,7 +37,7 @@ const Tournament = () => {
   const [channel, setChannel] = useState();
   const [ip, setIp] = useState();
   const [openDConfirm, setOpenDConfirm] = useState(false);
-  const [rowDelete, setRowDelete] = useState();
+  // const [rowDelete, setRowDelete] = useState();
 
   const [port, setPort] = useState();
 
@@ -137,10 +137,10 @@ const Tournament = () => {
     setOpenDialog(true);
   };
 
-  const handleIconDeleteClick = (match) => {
-    setOpenDConfirm(true);
-    setRowDelete(match);
-  };
+  // const handleIconDeleteClick = (match) => {
+  //   setOpenDConfirm(true);
+  //   setRowDelete(match);
+  // };
 
   useEffect(() => {
     const getTournaments = async () => {
@@ -161,20 +161,20 @@ const Tournament = () => {
     console.log(row);
   };
 
-  const handleDeleteClick = () => {
-    const deleteMatch = async () => {
-      try {
-        await videoEditingApi.deleteMatch(rowDelete.id);
-        setNoti(true);
-        setMessage("Delete Succeed");
-        setTypeNoti("success");
-        getMatches();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    deleteMatch();
-  };
+  // const handleDeleteClick = () => {
+  //   const deleteMatch = async () => {
+  //     try {
+  //       await videoEditingApi.deleteMatch(rowDelete.id);
+  //       setNoti(true);
+  //       setMessage("Delete Succeed");
+  //       setTypeNoti("success");
+  //       getMatches();
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   deleteMatch();
+  // };
   const handleClose = () => {
     setOpenDialog(false);
     setOpenDConfirm(false);
@@ -183,19 +183,19 @@ const Tournament = () => {
     setFile(file);
   };
 
-  const handleConfirmClick = () => {
-    handleDeleteClick();
-    setOpenDConfirm(false);
-  };
+  // const handleConfirmClick = () => {
+  //   handleDeleteClick();
+  //   setOpenDConfirm(false);
+  // };
   return (
     <>
-      <ConfirmDialog
+      {/* <ConfirmDialog
         title="Confirm"
         description="Are you sure to delete the record?"
         onClose={handleClose}
         onConfirm={handleConfirmClick}
         open={openDConfirm}
-      />
+      /> */}
       <Dialog open={opendialog} onClose={handleClose} scroll={scroll}>
         <DialogTitle
           sx={{
@@ -241,176 +241,16 @@ const Tournament = () => {
           {message}
         </Alert>
       </Snackbar>
-      <Card
-        sx={{
-          width: "50%",
-          padding: 5,
-          margin: "auto",
-          marginBottom: 3,
-        }}
-      >
-        <Grid
-          container
-          spacing={2}
-          sx={{ alignItems: "center"}}
-          component="form"
-          onSubmit={handleSubmit}
-        >
-          <Grid item xs={3}>
-            League Name
-          </Grid>
-
-          <Grid item xs={9}>
-            <div hidden={!hidden}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                {/* <Tooltip title="Add new option for Tournament" placement="top"> */}
-                <IconButton color="primary" onClick={() => setHidden(!hidden)}>
-                  <AddIcon />
-                </IconButton>
-                {/* </Tooltip> */}
-                <Autocomplete
-                  options={tournaments ? tournaments : []}
-                  size="small"
-                  value={tournament || null}
-                  fullWidth
-                  getOptionLabel={(option) => option["name"] || ""}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      placeholder="Select league name"
-                      variant="standard"
-                      required={hidden}
-                      inputProps={{
-                        ...params.inputProps,
-                      }}
-                    />
-                  )}
-                  onChange={handleTournamentChange}
-                />
-              </div>
-            </div>
-            <div hidden={hidden}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                {/* <Tooltip title="Back to select Tournament" placement="top"> */}
-                <IconButton color="primary" onClick={() => setHidden(!hidden)}>
-                  <ArrowLeftIcon />
-                </IconButton>
-                {/* </Tooltip> */}
-                <TextField
-                  value={tournamentName}
-                  variant="standard"
-                  size="small"
-                  onChange={(e) => setTournamentName(e.target.value)}
-                  fullWidth
-                  required={!hidden}
-                  placeholder="Enter league name"
-                />
-              </div>
-            </div>
-          </Grid>
-          {/* <Grid item xs={0.5}>
-            
-          </Grid> */}
-          <Grid item xs={3}>
-            Match Name
-          </Grid>
-          <Grid item xs={9}>
-            <TextField
-              value={matchName}
-              variant="standard"
-              size="small"
-              onChange={(e) => setMatchName(e.target.value)}
-              fullWidth
-              required
-              placeholder="Enter match name"
-            />
-          </Grid>
-
-          <Grid item xs={3}>
-            Time
-          </Grid>
-          <Grid item xs={9}>
-            <CustomDatePicker
-              variant="standard"
-              value={time}
-              onChange={handleDateChange}
-            />
-          </Grid>
-
-          <Grid item xs={3}>
-            Channel
-          </Grid>
-          <Grid item xs={9}>
-            <TextField
-              value={channel}
-              variant="standard"
-              size="small"
-              onChange={(e) => setChannel(e.target.value)}
-              fullWidth
-              required
-              placeholder="Enter Channel Name"
-            />
-          </Grid>
-          <Grid item xs={1}>
-            IP
-          </Grid>
-          <Grid item xs={5}>
-            <TextField
-              value={ip}
-              variant="standard"
-              size="small"
-              onChange={(e) => setIp(e.target.value)}
-              fullWidth
-              required
-              placeholder="Enter IP"
-            />
-          </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={2}>
-            Port
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              value={port}
-              variant="standard"
-              size="small"
-              onChange={(e) => setPort(e.target.value)}
-              fullWidth
-              required
-              placeholder="Enter Port"
-            />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            <Button type="submit" variant="contained">
-              Save
-            </Button>
-          </Grid>
-        </Grid>
-      </Card>
 
       <TableTournament
         data={matches}
         titleSearch={tournaments}
         handleResultClick={handleResultClick}
         handleIconUploadClick={handleIconUploadClick}
-        handleIconDeleteClick={handleIconDeleteClick}
+        // handleIconDeleteClick={handleIconDeleteClick}
       />
     </>
   );
 };
 
-export default Tournament;
+export default MatchManagement;

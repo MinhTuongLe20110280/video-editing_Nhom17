@@ -13,6 +13,10 @@ import HighlightReview from "../highlight-review";
 import Film from "../Film";
 import HighlightFilter from "../HiglightFilter/highlight-filter";
 import Gallery from "../Gallery";
+import AccountManagement from "../AccountManagement/AccountManagement";
+import UserManagement from "../UserManagement/UserManagement";
+import MatchManagement from "../MatchManagement/MatchManagement";
+import Chart from "../Chart/Chart";
 
 function RoutePath() {
   return (
@@ -28,6 +32,10 @@ function RoutePath() {
       <Route path="/highlight-review" element={<HighlightReview />} />
       <Route path="/highlight" element={<HighlightFilter />} />
       <Route path="/gallery" element={<Gallery />} />
+      <Route path="/accountmanagement" element={<AccountManagement />} />
+      <Route path="/usermanagement" element={<UserManagement />} />
+      <Route path="/matchmanagement" element={<MatchManagement />} />
+      <Route path="/chart" element={<Chart />} />
     </Routes>
   );
 }
