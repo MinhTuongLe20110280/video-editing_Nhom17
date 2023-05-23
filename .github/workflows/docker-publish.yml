@@ -15,6 +15,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2 
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
       - name: Build and push frontend image
         
         if: github.event.pull_request.merged && startsWith(github.head_ref, 'frontend')
@@ -26,6 +31,7 @@ jobs:
           npm cache clean --force
           npm install --legacy-peer-deps
           npm i chart.js --force
+          npm ci
           npm run build
           docker build -t ${{ env.DOCKERHUB_USERNAME }}/frontend:latest .
           docker login -u ${{ env.DOCKERHUB_USERNAME }} -p ${{ env.DOCKERHUB_PASSWORD }}
