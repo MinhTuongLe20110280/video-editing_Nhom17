@@ -6,7 +6,7 @@ import { Link, IconButton, Tooltip } from "@mui/material";
 import "../VideoInput/table-video.css";
 import "antd/dist/antd.css";
 
-import DeleteIcon from "@mui/icons-material/Delete";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 const { RangePicker } = DatePicker;
 function TableTournament(props) {
@@ -15,7 +15,7 @@ function TableTournament(props) {
     titleSearch,
     handleResultClick,
     handleIconUploadClick,
-    handleIconDeleteClick,
+    // handleIconDeleteClick,
   } = props;
 
   const [titleS, setTitleS] = useState();
@@ -266,23 +266,23 @@ function TableTournament(props) {
         );
       },
     },
-    {
-      title: "Delete",
-      render: (row) => {
-        return (
-          <Tooltip key={123} title="Delete Match" placement="top">
-            <IconButton
-              aria-label="delete"
-              onClick={(e) => {
-                handleIconDeleteClick(row);
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        );
-      },
-    },
+    // {
+    //   title: "Delete",
+    //   render: (row) => {
+    //     return (
+    //       <Tooltip key={123} title="Delete Match" placement="top">
+    //         <IconButton
+    //           aria-label="delete"
+    //           onClick={(e) => {
+    //             handleIconDeleteClick(row);
+    //           }}
+    //         >
+    //           <DeleteIcon />
+    //         </IconButton>
+    //       </Tooltip>
+    //     );
+    //   },
+    // },
   ];
   const showTotal = (total) => {
     return `Total: ${total} match`;

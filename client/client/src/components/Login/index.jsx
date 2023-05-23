@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import background from "./bg.jpg";
 import Cookies from "js-cookie";
 import { userApi } from "../../api";
+import "./index.scss"
 
 const style = {
   backgroundImage: `url(${background})`,
@@ -66,7 +67,8 @@ function Login() {
       } catch (error) {
         setLoading(false);
         setErr(true);
-        setMessage(error.response.data.description);
+        setMessage("Invalid Information!");
+        // setMessage(error.response.data.description);
       }
     };
     login();
@@ -90,6 +92,7 @@ function Login() {
           padding: "40px",
           backgroundColor: "rgba(255, 255, 255, 0.7)",
           borderRadius: "30px",
+          width: "30vw"
         }}
       >
         <Typography
@@ -106,8 +109,9 @@ function Login() {
         <Grid
           sx={{
             mt: "20px",
-            width: "18vw",
-            minWidth: "300px",
+            width: "100%",
+            margin: 0,
+            paddingRight: "16px"
           }}
           container
           spacing={2}
@@ -166,19 +170,36 @@ function Login() {
             display="flex"
             position="relative"
           >
-            <Button
-              variant="contained"
-              sx={{
-                paddingLeft: "70px",
-                paddingRight: "70px",
-                margin: "auto",
-                backgroundColor: "#408DBA",
-              }}
-              disabled={loading}
-              type="submit"
-            >
-              Sign in
-            </Button>
+            <div className="button-bar">
+              <Button
+                variant="contained"
+                sx={{
+                  margin: "auto",
+                  backgroundColor: "#408DBA",
+                  width: "40%",
+                  fontSize:"1.2rem",
+                  height:"60px"
+                }}
+                disabled={loading}
+                type="submit"
+              >
+                Sign in
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  margin: "auto",
+                  backgroundColor: "#408DBA",
+                  width: "40%",
+                  fontSize:"12px",
+                  height:"60px"
+                }}
+                disabled={loading}
+                onClick={() => navigate("/forgotPassword")}
+              >
+                Forgot Password
+              </Button>
+            </div>
             {loading && (
               <CircularProgress
                 size={25}
