@@ -17,9 +17,6 @@ jobs:
 
       - name: Build and push frontend image
         
-        uses: actions/setup-node@v2
-          with:
-            node-version: 14
         if: github.event.pull_request.merged && startsWith(github.head_ref, 'frontend')
         env:
           DOCKERHUB_USERNAME: lamnguyen0206
