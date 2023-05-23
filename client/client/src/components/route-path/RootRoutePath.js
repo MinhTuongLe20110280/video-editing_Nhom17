@@ -6,6 +6,7 @@ import RoutePath from "./route-path";
 import NavTabs from "../nav-tabs/nav-tabs";
 import Login from "../Login";
 import SignUp from "../Login/sign-up";
+import ForgotPassword from "../Login/forgotPassword";
 //IndexImportHygen
 
 function rootRouters() {
@@ -22,6 +23,11 @@ function rootRouters() {
           element={<LoginPrivate element={<SignUp />} />}
           exact
         />
+        <Route
+          path="/forgotPassword"
+          element={<ForgotPassword />}
+          exact
+        />        
         <Route
           path="/*"
           element={

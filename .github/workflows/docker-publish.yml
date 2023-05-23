@@ -13,24 +13,30 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-    
+        uses: actions/checkout@v2 
+
       - name: Build and push frontend image
+        
+        uses: actions/setup-node@v2
+          with:
+            node-version: 14
         if: github.event.pull_request.merged && startsWith(github.head_ref, 'frontend')
         env:
-           DOCKERHUB_USERNAME: ${{ secrets.lamnguyen0206 }}
-           DOCKERHUB_PASSWORD: ${{ secrets.109339Lam@ }}
+          DOCKERHUB_USERNAME: lamnguyen0206
+          DOCKERHUB_PASSWORD: 109339Lam@
         run: |
-           cd frontend
-           docker build -t lamnguyen0206/frontend:latest .
-           docker login -u lamnguyen0206 -p 109339Lam@
-           docker push lamnguyen0206/frontend:latest
+          cd client/client
+          npm i chart.js
+          docker build -t ${{ env.DOCKERHUB_USERNAME }}/frontend:latest .
+          docker login -u ${{ env.DOCKERHUB_USERNAME }} -p ${{ env.DOCKERHUB_PASSWORD }}
+          docker push ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
       - name: Build and push backend image
         if: github.event.pull_request.merged && startsWith(github.head_ref, 'backend')
         env:
           DOCKERHUB_USERNAME: lamnguyen0206
           DOCKERHUB_PASSWORD: 109339Lam@
         run: |
+          cd server/video-editing-api/video-editing-api
           docker build -t ${{ env.DOCKERHUB_USERNAME }}/backend:latest .
           docker login -u ${{ env.DOCKERHUB_USERNAME }} -p ${{ env.DOCKERHUB_PASSWORD }}
           docker push ${{ env.DOCKERHUB_USERNAME }}/backend:latest
