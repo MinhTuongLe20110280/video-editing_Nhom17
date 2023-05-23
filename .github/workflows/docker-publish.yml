@@ -18,13 +18,8 @@ jobs:
       - name: Build and push frontend image
         if: github.event.pull_request.merged && startsWith(github.head_ref, 'frontend')
         env:
-<<<<<<< Updated upstream
-           DOCKERHUB_USERNAME: lamnguyen0206
-           DOCKERHUB_PASSWORD: 109339Lam@
-=======
           DOCKERHUB_USERNAME: ${{ secrets.lamnguyen0206 }}
           DOCKERHUB_PASSWORD: ${{ secrets.109339Lam@ }}
->>>>>>> Stashed changes
         run: |
           cd client/client
           docker build -t ${{ env.DOCKERHUB_USERNAME }}/frontend:latest .
