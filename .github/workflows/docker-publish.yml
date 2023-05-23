@@ -31,8 +31,6 @@ jobs:
           npm cache clean --force
           npm install --legacy-peer-deps
           npm i chart.js --force
-          npm ci
-          npm run build
           docker build -t ${{ env.DOCKERHUB_USERNAME }}/frontend:latest .
           docker login -u ${{ env.DOCKERHUB_USERNAME }} -p ${{ env.DOCKERHUB_PASSWORD }}
           docker push ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
