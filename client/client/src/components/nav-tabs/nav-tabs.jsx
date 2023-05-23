@@ -23,11 +23,23 @@ import {
   SubMenu,
 } from "react-pro-sidebar";
 
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
+import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
+import BarChartIcon from '@mui/icons-material/BarChart';
+
 function ResponsiveDrawer(props) {
+  const adminUsername = "leminhtuong";
+  const isUserAdmin = localStorage.getItem("username") === adminUsername;
+
   const [collapsed, setCollapsed] = React.useState(true);
   const [listItem, setListItem] = React.useState(() => {
     const listItem = [
-      { name: "Soccer", url: "/", icon: <SportsSoccerIcon /> },
+      { 
+        name: "Soccer",
+        url: "/",
+        icon: <SportsSoccerIcon /> 
+      },
       {
         name: "Highlight",
         url: "/highlight",
@@ -38,7 +50,30 @@ function ResponsiveDrawer(props) {
         url: "/gallery",
         icon: <CollectionsOutlinedIcon />,
       },
+      {
+        name: "Account Management",
+        url: "/accountmanagement",
+        icon: <ManageAccountsIcon />,
+      },
     ];
+    if (isUserAdmin) {
+      listItem.push({
+        name: "User Management",
+        url: "/usermanagement",
+        icon: <SupervisorAccountIcon />,
+      });
+      listItem.push({
+        name: "Match Management",
+        url: "/matchmanagement",
+        icon: <SmartDisplayIcon />,
+      });
+      listItem.push({
+        name: "Chart",
+        url: "/chart",
+        icon: <BarChartIcon />,
+      });
+    }
+
     return listItem;
   });
   let navigate = useNavigate();
@@ -102,7 +137,7 @@ function ResponsiveDrawer(props) {
             </Menu>
           </SidebarContent>
           <SidebarFooter style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 16, padding: 1 }}>
+            <div style={{ fontSize: 12, padding: 1, maxWidth: "100%" }}>
               WELCOME {localStorage.getItem("fullName")}
             </div>
             <div>
