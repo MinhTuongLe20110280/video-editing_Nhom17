@@ -27,7 +27,6 @@ namespace video_editing_api.Controllers
             _videoEditingService = videoEditingService;
         }
 
-
         [HttpGet("getTournament")]
         public async Task<IActionResult> GetTournament()
         {
@@ -41,7 +40,8 @@ namespace video_editing_api.Controllers
                 return BadRequest(new Response<List<Tournament>>(400, e.Message, null));
             }
         }
-        [HttpPost("addTournament")]
+        
+       [HttpPost("addTournament")]
         public async Task<IActionResult> AddTournament([FromBody] List<Tournament> tournaments)
         {
             try
@@ -54,9 +54,6 @@ namespace video_editing_api.Controllers
                 return BadRequest(new Response<string>(400, e.Message, null));
             }
         }
-
-
-
 
         [HttpGet("getMatchById")]
         public async Task<IActionResult> GetMatch(string Id)
@@ -100,7 +97,6 @@ namespace video_editing_api.Controllers
                 return BadRequest(new Response<List<MatchInfo>>(400, e.Message, null));
             }
         }
-
 
         [HttpPost("addMatch")]
         public async Task<IActionResult> AddMatch([FromBody] MatchInfo matchInfo)
@@ -157,6 +153,7 @@ namespace video_editing_api.Controllers
                 return BadRequest(new Response<List<HighlightVideo>>(400, e.Message, null));
             }
         }
+
         [HttpGet("getHighlightOfMatch/{matchId}")]
         public async Task<IActionResult> GeHighligthOfMatch(string matchId)
         {
@@ -183,7 +180,6 @@ namespace video_editing_api.Controllers
                 return BadRequest(new Response<List<HighlightVideo>>(400, e.Message, null));
             }
         }
-
 
         [HttpPost("concatHighlight")]
         public async Task<IActionResult> ConcatVideo(ConcatModel concatModel)
@@ -242,7 +238,6 @@ namespace video_editing_api.Controllers
             }
         }
 
-
         [HttpGet("getTag")]
         public async Task<IActionResult> getTag()
         {
@@ -263,6 +258,20 @@ namespace video_editing_api.Controllers
             try
             {
                 var res = await _videoEditingService.GetTeam(User.Identity.Name, leagueId);
+                return Ok(new Response<List<Team>>(200, "", res));
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(new Response<string>(400, e.Message, null));
+            }
+        }
+
+        [HttpGet("getAllTeam")]
+        public async Task<IActionResult> getAllTeam(string leagueId)
+        {
+            try
+            {
+                var res = await _videoEditingService.GetAllTeam(leagueId);
                 return Ok(new Response<List<Team>>(200, "", res));
             }
             catch (System.Exception e)
@@ -330,7 +339,6 @@ namespace video_editing_api.Controllers
             }
         }
 
-
         [HttpPost("updateAll/{matchId}")]
         public async Task<IActionResult> updateLogTrimmedAll(string matchId, int selected)
         {
@@ -348,8 +356,6 @@ namespace video_editing_api.Controllers
             }
         }
 
-
-
         [HttpPost("SaveToGallery")]
         [DisableRequestSizeLimit]
         public async Task<IActionResult> saveToGallery([FromForm] GalleryInput input)
@@ -364,12 +370,27 @@ namespace video_editing_api.Controllers
                 return BadRequest(new Response<string>(400, e.Message, null));
             }
         }
+
         [HttpGet("getGallery")]
         public async Task<IActionResult> getGallery(int type)
         {
             try
             {
                 var res = await _videoEditingService.getGalley(User.Identity.Name, type);
+                return Ok(new Response<List<Gallery>>(200, "", res));
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(new Response<string>(400, e.Message, null));
+            }
+        }
+
+        [HttpGet("getAllGallery")]
+        public async Task<IActionResult> getAllGallery(int type)
+        {
+            try
+            {
+                var res = await _videoEditingService.GetAllGalley(type);
                 return Ok(new Response<List<Gallery>>(200, "", res));
             }
             catch (System.Exception e)
