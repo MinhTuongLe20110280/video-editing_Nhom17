@@ -266,6 +266,20 @@ namespace video_editing_api.Controllers
             }
         }
 
+        [HttpGet("getAllTeam")]
+        public async Task<IActionResult> getAllTeam(string leagueId)
+        {
+            try
+            {
+                var res = await _videoEditingService.GetAllTeam(leagueId);
+                return Ok(new Response<List<Team>>(200, "", res));
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(new Response<string>(400, e.Message, null));
+            }
+        }
+
         [HttpPost("mergeHL")]
         public async Task<IActionResult> mergeHL(InputMergeHL input)
         {

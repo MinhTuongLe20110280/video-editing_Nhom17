@@ -11,6 +11,7 @@
         public const string FilmCollection = "Film";
         public const string TagEventCollection = "TagEvent";
         public const string TeamOfLeagueCollection = "TeamOfLeague";
+        public const string TeamCollection = "Team";
         public const string GalleryCollection = "Gallery";
 
         public const int HighlightStatusProcessing = 0;
