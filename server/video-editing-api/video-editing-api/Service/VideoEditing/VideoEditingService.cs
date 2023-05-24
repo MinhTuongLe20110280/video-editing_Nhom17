@@ -40,7 +40,6 @@ namespace video_editing_api.Service.VideoEditing
         private readonly IMongoCollection<TagEvent> _tagEvent;
         private readonly IMongoCollection<TeamOfLeague> _teamOfLeague;
         private readonly IMongoCollection<Gallery> _gallery;
-
         private readonly IHubContext<NotiHub> _hub;
         private readonly IMapper _mapper;
         private IHttpClientFactory _clientFactory;
@@ -68,7 +67,6 @@ namespace video_editing_api.Service.VideoEditing
         {
         }
 
-
         #region Tournament      
         public async Task<List<Tournament>> GetTournament()
         {
@@ -81,6 +79,7 @@ namespace video_editing_api.Service.VideoEditing
                 throw new System.Exception(e.Message);
             }
         }
+
         public async Task<string> AddTournament(List<Tournament> tournaments)
         {
             try
@@ -229,7 +228,6 @@ namespace video_editing_api.Service.VideoEditing
                 throw new System.Exception(e.Message);
             }
         }
-
 
         public async Task<string> ConcatVideoOfMatch(string username, ConcatModel concatModel)
         {
@@ -1096,6 +1094,26 @@ namespace video_editing_api.Service.VideoEditing
                 throw new System.Exception(e.Message);
             }
         }
+
+        public Task<List<Gallery>> GetAllGalley(int Type)
+        {
+            try
+            {
+                if (Type != -1)
+                {
+                    return _gallery.Find(gal => gal.Type == Type).ToListAsync();
+                }
+                else
+                {
+                    return _gallery.Find(_ => true).ToListAsync(); // Return all the galleries
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message);
+            }
+        }
         #endregion
     }
 }
+

@@ -41,6 +41,9 @@ namespace video_editing_api.Service.VideoEditing
 
         Task<string> SaveToGallery(string username, GalleryInput input);
         Task<List<Gallery>> getGalley(string username, int Type);
+
+        Task<List<Gallery>> GetAllGalley(int Type);
+
         Task<bool> deleteGallery(string id);
 
         Task<string> getUriRedirect(VideoUploadModel model);
