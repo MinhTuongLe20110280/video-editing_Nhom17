@@ -71,6 +71,7 @@ namespace video_editing_api.Controllers
                 return BadRequest(new Response<List<MatchInfo>>(400, e.Message, null));
             }
         }
+
         [HttpGet("getMatch")]
         public async Task<IActionResult> GetMatch()
         {
@@ -85,6 +86,22 @@ namespace video_editing_api.Controllers
                 return BadRequest(new Response<List<MatchInfo>>(400, e.Message, null));
             }
         }
+
+        [HttpGet("getAllMatch")]
+        public async Task<IActionResult> GetAllMatch()
+        {
+            try
+            {
+                var result = await _videoEditingService.GetAllMatchInfo();
+                return Ok(new Response<List<MatchInfo>>(200, "", result));
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(new Response<List<MatchInfo>>(400, e.Message, null));
+            }
+        }
+
+
         [HttpPost("addMatch")]
         public async Task<IActionResult> AddMatch([FromBody] MatchInfo matchInfo)
         {

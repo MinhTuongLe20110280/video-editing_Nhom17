@@ -14,6 +14,7 @@ namespace video_editing_api.Service.VideoEditing
 
         Task<MatchInfo> GetInfoOfMatch(string id);
         Task<List<MatchInfo>> GetMatchInfo(string username);
+        Task<List<MatchInfo>> GetAllMatchInfo();
         Task<string> AddMatchInfo(string username, MatchInfo matchInfo);
         Task<bool> DeleteMatch(string id);
         Task<string> ConcatVideoOfMatch(string username, ConcatModel concatModel);
