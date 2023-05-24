@@ -14,8 +14,6 @@ function TableTournament(props) {
     data,
     titleSearch,
     handleResultClick,
-    handleIconUploadClick,
-    // handleIconDeleteClick,
   } = props;
 
   const [titleS, setTitleS] = useState();
@@ -167,25 +165,14 @@ function TableTournament(props) {
         dateStart.getTime() <= date.getTime();
       return isInRange ? record[dataIndex] : "";
     },
-    // onFilterDropdownVisibleChange: (visible) => {
-    //   if (visible) {
-    //     setTimeout(() => searchInputDate.current.select(), 100);
-    //   }
-    // },
-    // render: (text) =>
-    //   searchedColumn === dataIndex ? (
-    //     <Highlighter
-    //       highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-    //       searchWords={[searchText]}
-    //       autoEscape
-    //       textToHighlight={text ? text.toString() : ""}
-    //     />
-    //   ) : (
-    //     text
-    //   ),
   });
 
   const columns = [
+    {
+      title: "Owner",
+      dataIndex: "username",
+      ...getColumnSearchProps("username"),
+    },
     {
       title: "Title",
       dataIndex: "tournametName",
@@ -246,43 +233,6 @@ function TableTournament(props) {
           );
       },
     },
-    {
-      title: "Upload",
-      render: (row) => {
-        return (
-          <Tooltip
-            key={12345}
-            title="Change/Upload Json file for match"
-            placement="top"
-          >
-            <IconButton
-              onClick={() => {
-                handleIconUploadClick(row);
-              }}
-            >
-              <CloudUploadIcon />
-            </IconButton>
-          </Tooltip>
-        );
-      },
-    },
-    // {
-    //   title: "Delete",
-    //   render: (row) => {
-    //     return (
-    //       <Tooltip key={123} title="Delete Match" placement="top">
-    //         <IconButton
-    //           aria-label="delete"
-    //           onClick={(e) => {
-    //             handleIconDeleteClick(row);
-    //           }}
-    //         >
-    //           <DeleteIcon />
-    //         </IconButton>
-    //       </Tooltip>
-    //     );
-    //   },
-    // },
   ];
   const showTotal = (total) => {
     return `Total: ${total} match`;

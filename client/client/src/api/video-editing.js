@@ -5,6 +5,10 @@ const videoEditingApi = {
     const url = "/VideoEditings/getMatch";
     return axiosClient.get(url);
   },
+  getAllMatches: () => {
+    const url = "/VideoEditings/getAllMatch";
+    return axiosClient.get(url);
+  },
 
   updateAll: (id, checked) => {
     const url = `/VideoEditings/updateAll/${id}?selected=${checked}`;

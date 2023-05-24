@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import "./chart.scss";
+import videoEditingApi from "../../api/video-editing";
 
 const Chart = () => {
+  const [matches, setMatches] = useState([]);
+  useEffect(() => {
+    const getMatches = async () => {
+      try {
+        const response = await videoEditingApi.getAllMatches();
+        setMatches(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getMatches();
+  }, []);
+
   const data = {
     labels: [
       "January",
@@ -21,7 +35,20 @@ const Chart = () => {
     datasets: [
       {
         label: "",
-        data: [210, 250, 230, 260, 280, 210, 210, 240, 220, 270, 220, 290],
+        data: [
+          matches.length * 10,
+          250,
+          230,
+          260,
+          280,
+          210,
+          210,
+          240,
+          220,
+          270,
+          220,
+          290,
+        ],
         backgroundColor: [
           "#54cdec",
           "#fa9ec3",
@@ -40,20 +67,22 @@ const Chart = () => {
     ],
   };
 
+  const values = data.datasets[0].data;
+  const maxValue = Math.max(...values);
+
   const options = {
     scales: {
       yAxes: [
         {
           ticks: {
-            // beginAtZero: true,
-            min: 150,
-            max: 300, 
+            beginAtZero: true,
+            min: 0,
+            max: maxValue + 50,
           },
         },
       ],
     },
   };
-  
 
   const legendItems = data.labels.map((label, index) => (
     <span
