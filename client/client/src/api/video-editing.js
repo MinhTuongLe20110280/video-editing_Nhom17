@@ -141,6 +141,10 @@ const videoEditingApi = {
     const url = `/VideoEditings/getGallery?type=${type}`;
     return axiosClient.get(url);
   },
+  getAllGalleries: (type) => {
+    const url = `/VideoEditings/getAllGallery?type=${type}`;
+    return axiosClient.get(url);
+  },
   saveToGallery: (formdata) => {
     const url = `/VideoEditings/saveToGallery`;
     return axiosClient.post(url, formdata);

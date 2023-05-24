@@ -5,11 +5,24 @@ import videoEditingApi from "../../api/video-editing";
 
 const Chart = () => {
   const [matches, setMatches] = useState([]);
+  const [tournaments, setTournaments] = useState([])
+  const [tagnames, setTagnames] = useState([])
+  const [gallery1, setGallery1] = useState([])
+  const [gallery2, setGallery2] = useState([])
+  
   useEffect(() => {
     const getMatches = async () => {
       try {
-        const response = await videoEditingApi.getAllMatches();
-        setMatches(response.data);
+        const response1 = await videoEditingApi.getAllMatches();
+        setMatches(response1.data);
+        const response2 = await videoEditingApi.getTournaments();
+        setTournaments(response2.data)
+        const response3 = await videoEditingApi.getTagNameList();
+        setTagnames(response3.data)
+        const response4 = await videoEditingApi.getAllGalleries(0);
+        setGallery1(response4.data)
+        const response5 = await videoEditingApi.getAllGalleries(1);
+        setGallery2(response5.data)
       } catch (error) {
         console.log(error);
       }
@@ -17,13 +30,14 @@ const Chart = () => {
     getMatches();
   }, []);
 
+
   const data = {
     labels: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
+      "Matches",
+      "Tournaments",
+      "TagNames",
+      "Images",
+      "Videos",
       "June",
       "July",
       "August",
@@ -36,18 +50,18 @@ const Chart = () => {
       {
         label: "",
         data: [
-          matches.length * 10,
-          250,
-          230,
-          260,
-          280,
-          210,
-          210,
-          240,
-          220,
-          270,
-          220,
-          290,
+          matches.length,
+          tournaments.length,
+          tagnames.length,
+          gallery1.length,
+          gallery2.length,
+          21,
+          21,
+          24,
+          22,
+          27,
+          22,
+          29,
         ],
         backgroundColor: [
           "#54cdec",
@@ -77,7 +91,7 @@ const Chart = () => {
           ticks: {
             beginAtZero: true,
             min: 0,
-            max: maxValue + 50,
+            max: maxValue + 10,
           },
         },
       ],
