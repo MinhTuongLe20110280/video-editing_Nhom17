@@ -22,16 +22,8 @@ const UserManagement = () => {
       dataIndex: "email",
     },
     {
-      title: "Password",
-      dataIndex: "password",
-    },
-    {
       title: "Phonenumber",
       dataIndex: "phonenumber",
-    },
-    {
-      title: "EmailConfirmed",
-      dataIndex: "matchName",
     },
     {
       title: "NoVideos",

@@ -88,18 +88,26 @@ const Tournament = () => {
     const addTournament = async () => {
       try {
         const response = await videoEditingApi.addMatch(payload);
+        // console.log(response);
         if (response.status === 200 && response.data === "Succeed") {
-          setNoti(true);
-          setMessage("Saved");
-          setTypeNoti("success");
+          // setNoti(true);
+          // setMessage("Saved");
+          // setTypeNoti("success");
           getMatches();
         }
       } catch (error) {
-        setNoti(true);
-        setMessage(error.response.description);
-        setTypeNoti("error");
-        console.log(error);
+        // setNoti(true);
+        // setMessage(error.response.description);
+        // setTypeNoti("error");
+        // console.log(error);
+        getMatches();
       }
+
+      // setNoti(true);
+      // setMessage("Saved");
+      // setTypeNoti("success");
+      // getMatches();
+      // window.location.reload();
     };
     addTournament();
   };
@@ -252,7 +260,7 @@ const Tournament = () => {
         <Grid
           container
           spacing={2}
-          sx={{ alignItems: "center"}}
+          sx={{ alignItems: "center" }}
           component="form"
           onSubmit={handleSubmit}
         >

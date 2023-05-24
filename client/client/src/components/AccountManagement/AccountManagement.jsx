@@ -8,19 +8,13 @@ const AccountManagement = () => {
     Username: "leminhtuong",
     Fullname: "leminhtuong",
     Email: "leminhtuong09122002@gmail.com",
-    Password: "Mtl@091202",
     Phonenumber: "0834091202",
-    EmailConfirmed: false,
   };
 
   const [Username, setUsername] = useState(defaultValues.Username);
   const [Fullname, setFullname] = useState(defaultValues.Fullname);
   const [Email, setEmail] = useState(defaultValues.Email);
-  const [Password, setPassword] = useState(defaultValues.Password);
   const [Phonenumber, setPhonenumber] = useState(defaultValues.Phonenumber);
-  const [EmailConfirmed, setEmailConfirmed] = useState(
-    defaultValues.EmailConfirmed
-  );
   const [isEnable, setIsEnable] = useState(false);
   const [previousValues, setPreviousValues] = useState(null);
 
@@ -30,16 +24,10 @@ const AccountManagement = () => {
         Username,
         Fullname,
         Email,
-        Password,
         Phonenumber,
-        EmailConfirmed,
       });
     }
   }, [isEnable]);
-
-  const handleEmailConfirmedChange = (e) => {
-    setEmailConfirmed(e.target.checked);
-  };
 
   const handleEdit = () => {
     if (isEnable) {
@@ -47,9 +35,7 @@ const AccountManagement = () => {
         setUsername(previousValues.Username);
         setFullname(previousValues.Fullname);
         setEmail(previousValues.Email);
-        setPassword(previousValues.Password);
         setPhonenumber(previousValues.Phonenumber);
-        setEmailConfirmed(previousValues.EmailConfirmed);
         // console.log(previousValues);
       }
       setIsEnable(false);
@@ -136,23 +122,6 @@ const AccountManagement = () => {
           </Grid>
 
           <Grid item xs={3}>
-            Password
-          </Grid>
-          <Grid item xs={9}>
-            <TextField
-              value={Password}
-              variant="standard"
-              size="small"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              fullWidth
-              required
-              disabled={!isEnable}
-            />
-          </Grid>
-
-          <Grid item xs={3}>
             PhoneNumber
           </Grid>
           <Grid item xs={9}>
@@ -168,16 +137,6 @@ const AccountManagement = () => {
               disabled={!isEnable}
             />
           </Grid>
-
-          <Grid item xs={3}>
-            EmailConfirmed
-          </Grid>
-          <Checkbox
-            disabled={!isEnable}
-            checked={EmailConfirmed}
-            onChange={handleEmailConfirmedChange}
-          />
-          {/* <Checkbox disabled checked/> */}
 
           <Grid
             item
