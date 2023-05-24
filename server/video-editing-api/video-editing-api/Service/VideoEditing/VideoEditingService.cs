@@ -39,6 +39,8 @@ namespace video_editing_api.Service.VideoEditing
         private readonly IMongoCollection<HighlightVideo> _highlight;
         private readonly IMongoCollection<TagEvent> _tagEvent;
         private readonly IMongoCollection<TeamOfLeague> _teamOfLeague;
+        private readonly IMongoCollection<Team> _team;
+
         private readonly IMongoCollection<Gallery> _gallery;
         private readonly IHubContext<NotiHub> _hub;
         private readonly IMapper _mapper;
@@ -55,11 +57,11 @@ namespace video_editing_api.Service.VideoEditing
             _tagEvent = dbClient.GetTagEventCollection();
             _teamOfLeague = dbClient.GetTeamOfLeagueCollection();
             _gallery = dbClient.GetGalleryCollection();
+            _team = dbClient.GetTeamCollection();
             _clientFactory = clientFactory;
             _config = config;
             _hub = hub;
             _pathClientSecret = Path.Combine(webHostEnvironment.ContentRootPath, "Cert", "client_secret.json");
-
             _mapper = mapper;
         }
 
@@ -578,8 +580,6 @@ namespace video_editing_api.Service.VideoEditing
                 throw new System.Exception(ex.Message);
             }
         }
-
-
         #endregion
 
         #region tag
@@ -1107,6 +1107,45 @@ namespace video_editing_api.Service.VideoEditing
                 {
                     return _gallery.Find(_ => true).ToListAsync(); // Return all the galleries
                 }
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Team>> GetAllTeam(string leagueId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(leagueId)) return _team.Find(_ => true).ToList();
+
+                var team = await _teamOfLeague.Find(team => team.TournamentId == leagueId).FirstOrDefaultAsync();
+
+                if (team == null)
+                {
+                    List<Team> teams = new List<Team>();
+                    var matchs = _matchInfo.Find(x =>x.TournamentId == leagueId && x.IsUploadJsonFile).ToList();
+                    foreach (var match in matchs)
+                    {
+                        foreach (var item in match.JsonFile.teams)
+                        {
+                            if (!teams.Any(t => t.TeamName.ToLower() == item.ToLower()))
+                            {
+                                teams.Add(new Team(item));
+                            }
+                        }
+                    }
+
+                    team = new TeamOfLeague();
+                    team.TournamentId = leagueId;
+                    team.Team = teams;
+                    _teamOfLeague.InsertOne(team);
+
+                    return teams;
+                }
+                else
+                    return team.Team;
             }
             catch (System.Exception ex)
             {
