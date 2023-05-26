@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using video_editing_api.Model.Collection;
@@ -10,8 +11,11 @@ namespace video_editing_api.Service.User
     public interface IUserService
     {
         Task<List<AppUser>> GetAllUser();
-        Task<AppUser> GetUserById();
+
+        Task<AppUser> GetUserById(Guid id);
+
         Task<AppUser> GetUserByUsername(string username);
-        Task<AppUser> UpdateUserById();
+
+        Task<AppUser> UpdateUserById(Guid id, AppUser user);
     }
 }

@@ -145,7 +145,43 @@ namespace video_editing_api.Controllers
 
         }
 
-        [HttpGet("{username}")]
+     
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUserById(Guid id, [FromBody] AppUser updatedUser)
+        {
+            var user = await _userService.GetUserById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.UserName = updatedUser.UserName;
+            user.Email = updatedUser.Email;
+            user.PhoneNumber = updatedUser.PhoneNumber;
+            user.FullName = updatedUser.FullName;
+            user.PasswordHash = updatedUser.PasswordHash; // cập nhật thêm thuộc tính PasswordHash
+
+            var updated = await _userService.UpdateUserById(id, user);
+
+            return Ok(updated);
+        }
+
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetUserById(Guid id)
+        {
+            var user = await _userService.GetUserById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        [HttpGet("username/{username}")]
         public async Task<IActionResult> GetUserByUsername(string username)
         {
             var user = await _userService.GetUserByUsername(username);

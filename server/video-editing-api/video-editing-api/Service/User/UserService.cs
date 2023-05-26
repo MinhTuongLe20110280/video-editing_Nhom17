@@ -8,6 +8,7 @@ using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
@@ -52,9 +53,18 @@ namespace video_editing_api.Service.User
             }
         }
 
-        public Task<AppUser> GetUserById()
+        public async Task<AppUser> GetUserById(Guid id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var filter = Builders<AppUser>.Filter.Eq(u => u.Id, id);
+                var user = await _user.Find(filter).FirstOrDefaultAsync();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not get user by id: {ex.Message}");
+            }
         }
 
         public async Task<AppUser> GetUserByUsername(string username)
@@ -71,9 +81,40 @@ namespace video_editing_api.Service.User
             }
         }
 
-        public Task<AppUser> UpdateUserById()
+        public async Task<AppUser> UpdateUserById(Guid id, AppUser updatedUser)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var filter = Builders<AppUser>.Filter.Eq(u => u.Id, id);
+
+                var update = Builders<AppUser>.Update
+                    .Set(u => u.UserName, updatedUser.UserName)
+                    .Set(u => u.Email, updatedUser.Email)
+                    .Set(u => u.PhoneNumber, updatedUser.PhoneNumber)
+                    .Set(u => u.FullName, updatedUser.FullName);
+
+                if (!string.IsNullOrEmpty(updatedUser.PasswordHash))
+                {
+                    var hasher = new PasswordHasher<AppUser>();
+
+                    // Hash mật khẩu mới bằng PasswordHasher
+                    var hashedPassword = hasher.HashPassword(updatedUser, updatedUser.PasswordHash);
+
+                    update = update.Set(u => u.PasswordHash, hashedPassword);
+                }
+
+                var options = new FindOneAndUpdateOptions<AppUser>
+                {
+                    ReturnDocument = ReturnDocument.After
+                };
+
+                var user = await _user.FindOneAndUpdateAsync(filter, update, options);
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not update user: {ex.Message}");
+            }
         }
     }
 }
