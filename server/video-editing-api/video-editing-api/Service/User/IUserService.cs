@@ -11,7 +11,7 @@ namespace video_editing_api.Service.User
     {
         Task<List<AppUser>> GetAllUser();
         Task<AppUser> GetUserById();
-        Task<AppUser> GetUserByUsername();
+        Task<AppUser> GetUserByUsername(string username);
         Task<AppUser> UpdateUserById();
     }
 }

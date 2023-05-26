@@ -57,9 +57,18 @@ namespace video_editing_api.Service.User
             throw new System.NotImplementedException();
         }
 
-        public Task<AppUser> GetUserByUsername()
+        public async Task<AppUser> GetUserByUsername(string username)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var filter = Builders<AppUser>.Filter.Eq(u => u.UserName, username);
+                var user = await _user.Find(filter).FirstOrDefaultAsync();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not get user by username: {ex.Message}");
+            }
         }
 
         public Task<AppUser> UpdateUserById()
