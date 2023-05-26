@@ -15,5 +15,6 @@ namespace video_editing_api.Service.DBConnection
         IMongoCollection<TeamOfLeague> GetTeamOfLeagueCollection();
         IMongoCollection<Team> GetTeamCollection();
         IMongoCollection<Gallery> GetGalleryCollection();
+        IMongoCollection<AppUser> GetUserCollection();
     }
 }

@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using video_editing_api.Model;
 using video_editing_api.Model.Collection;
 using video_editing_api.Model.InputModel;
+using System.Linq;
+using video_editing_api.Service.User;
+using Microsoft.AspNetCore.Http;
 
 namespace video_editing_api.Controllers
 {
@@ -20,18 +23,29 @@ namespace video_editing_api.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IUserService _userService;
         private readonly IConfiguration _config;
-        public UsersController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config)
+
+        public UsersController(IUserService userService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _userService = userService;
             _config = config;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok();
+            try
+            {
+                var users = await _userService.GetAllUser();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving users: {ex.Message}");
+            }
         }
 
 

@@ -137,5 +137,17 @@ namespace video_editing_api.Service.DBConnection
                 throw new System.Exception(e.Message);
             }
         }
+
+        public IMongoCollection<AppUser> GetUserCollection()
+        {
+            try
+            {
+                return _database.GetCollection<AppUser>(SystemConstants.UserCollection);
+            }
+            catch (System.Exception e)
+            {
+                throw new System.Exception(e.Message);
+            }
+        }
     }
 }
