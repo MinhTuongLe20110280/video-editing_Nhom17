@@ -104,44 +104,70 @@ function ForgotPassword() {
       setLoading(true);
       const fetchData = async () => {
         try {
-          const response = await userApi.getUserByUsername(username);
+          let response;
+          const fetchDataTimeout = new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+              reject(new Error("Timeout"));
+            }, 3000);
 
-          const updatePassword = async () => {
-            try {
-              const updatedProfile = {
-                userName: username,
-                phoneNumber: response.phoneNumber,
-                fullName: response.fullName,
-                email: response.email,
-                passwordHash: password,
-              };
+            userApi
+              .getUserByUsername(username)
+              .then((res) => {
+                clearTimeout(timeout);
+                resolve(res);
+              })
+              .catch((error) => {
+                clearTimeout(timeout);
+                reject(error);
+              });
+          });
 
-              await userApi.updateUserAccount(response.id, updatedProfile);
+          try {
+            response = await fetchDataTimeout;
+          } catch (error) {
+            setLoading(false);
+            setErr(true);
+            setMessage("Update Fail");
+            return;
+          }
+
+          if (!response) {
+            setLoading(false);
+            setErr(true);
+            setMessage("Update Fail");
+            return;
+          }
+
+          const updatedProfile = {
+            userName: username,
+            phoneNumber: response.phoneNumber,
+            fullName: response.fullName,
+            email: response.email,
+            passwordHash: password,
+          };
+
+          await userApi.updateUserAccount(response.id, updatedProfile);
+          setTimeout(() => {
+            setLoading(false);
+            setSuc(true);
+            setTimeout(() => {
+              setTime(2);
               setTimeout(() => {
-                setLoading(false);
-                setSuc(true);
+                setTime(1);
                 setTimeout(() => {
-                  setTime(2);
-                  setTimeout(() => {
-                    setTime(1);
-                    setTimeout(() => {
-                      navigate("/login");
-                    }, 1000);
-                  }, 1000);
+                  navigate("/login");
                 }, 1000);
               }, 1000);
-            } catch (error) {
-              console.log(error.response.data.description);
-            }
-          };
-          updatePassword();
+            }, 1000);
+          }, 1000);
+
           setNoti(true);
           setMessage("Update Succeed");
           setTypeNoti("success");
         } catch (error) {
-          setNoti(true);
+          setLoading(false);
+          setErr(true);
           setMessage("Update Fail");
-          setTypeNoti("error");
         }
       };
 
@@ -151,6 +177,7 @@ function ForgotPassword() {
       setMessage("Please meet the conditions");
     }
   };
+
   return (
     <div style={style}>
       <Snackbar

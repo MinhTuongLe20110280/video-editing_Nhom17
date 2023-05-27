@@ -2,27 +2,34 @@ import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import "./chart.scss";
 import videoEditingApi from "../../api/video-editing";
+import { userApi } from "../../api";
 
 const Chart = () => {
   const [matches, setMatches] = useState([]);
-  const [tournaments, setTournaments] = useState([])
-  const [tagnames, setTagnames] = useState([])
-  const [gallery1, setGallery1] = useState([])
-  const [gallery2, setGallery2] = useState([])
-  
+  const [tournaments, setTournaments] = useState([]);
+  const [tagEvents, setTagEvents] = useState([]);
+  const [gallery1, setGallery1] = useState([]);
+  const [gallery2, setGallery2] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [highlights, setHighlights] = useState([]);
+
   useEffect(() => {
     const getMatches = async () => {
       try {
         const response1 = await videoEditingApi.getAllMatches();
         setMatches(response1.data);
         const response2 = await videoEditingApi.getTournaments();
-        setTournaments(response2.data)
+        setTournaments(response2.data);
         const response3 = await videoEditingApi.getTagNameList();
-        setTagnames(response3.data)
+        setTagEvents(response3.data);
         const response4 = await videoEditingApi.getAllGalleries(0);
-        setGallery1(response4.data)
+        setGallery1(response4.data);
         const response5 = await videoEditingApi.getAllGalleries(1);
-        setGallery2(response5.data)
+        setGallery2(response5.data);
+        const response6 = await userApi.getAllUsers();
+        setUsers(response6);
+        const response7 = await videoEditingApi.getHighlight();
+        setHighlights(response7.data);
       } catch (error) {
         console.log(error);
       }
@@ -30,21 +37,15 @@ const Chart = () => {
     getMatches();
   }, []);
 
-
   const data = {
     labels: [
       "Matches",
       "Tournaments",
-      "TagNames",
+      "TagEvents",
       "Images",
       "Videos",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      "Users",
+      "Highlights",
     ],
     datasets: [
       {
@@ -52,16 +53,11 @@ const Chart = () => {
         data: [
           matches.length,
           tournaments.length,
-          tagnames.length,
+          tagEvents.length,
           gallery1.length,
           gallery2.length,
-          21,
-          21,
-          24,
-          22,
-          27,
-          22,
-          29,
+          users.length,
+          highlights.length
         ],
         backgroundColor: [
           "#54cdec",
@@ -71,11 +67,6 @@ const Chart = () => {
           "#8865ff",
           "#30343b",
           "#54cdec",
-          "#fa9ec3",
-          "#27ae60",
-          "#f39c12",
-          "#8865ff",
-          "#30343b",
         ],
       },
     ],

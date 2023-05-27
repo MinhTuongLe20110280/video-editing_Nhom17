@@ -20,6 +20,10 @@ const userApi = {
   updateUserAccount: (id ,data) => {
     const url = `Users/${id}`
     return axiosClient.put(url, data)
+  },
+  getAllUsers: () => {
+    const url = "/Users"
+    return axiosClient.get(url)
   }
 };
 

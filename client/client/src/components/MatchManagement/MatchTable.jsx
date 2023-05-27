@@ -7,7 +7,7 @@ import "../VideoInput/table-video.css";
 import "antd/dist/antd.css";
 
 const { RangePicker } = DatePicker;
-function TableTournament(props) {
+function MatchTable(props) {
   const {
     data,
     titleSearch,
@@ -245,4 +245,4 @@ function TableTournament(props) {
   );
 }
 
-export default TableTournament;
+export default MatchTable;
