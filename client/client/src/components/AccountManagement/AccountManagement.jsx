@@ -147,13 +147,9 @@ const AccountManagement = () => {
               value={Username}
               variant="standard"
               size="small"
-              onChange={(e) => {
-                setUsername(e.target.value);
-              }}
               fullWidth
               required
-              disabled={!isEnable}
-              placeholder="Empty"
+              disabled
             />
           </Grid>
           {/* <Grid item xs={0.5}>

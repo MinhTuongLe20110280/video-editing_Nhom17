@@ -1,26 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Table, Input, Button, Space, DatePicker } from "antd";
+import React, { useRef, useState } from "react";
+import { Table, Input, Button, Space } from "antd";
 import Highlighter from "react-highlight-words";
-import { SearchOutlined, CalendarOutlined } from "@ant-design/icons";
-import { Link } from "@mui/material";
+import { SearchOutlined } from "@ant-design/icons";
 import "../VideoInput/table-video.css";
 import "antd/dist/antd.css";
 
 function UserTable(props) {
-//   const { data, titleSearch, handleResultClick } = props;
-  const { data} = props;
-
-  const [titleS, setTitleS] = useState();
-//   useEffect(() => {
-//     const temp = [...titleSearch];
-//     const lstTemp = [];
-//     temp.forEach((item) => {
-//       lstTemp.push({ text: item.name, value: item.id });
-//     });
-//     setTitleS(lstTemp);
-//   }, [titleSearch]);
-
-  // for search
+  //   const { data, titleSearch, handleResultClick } = props;
+  const { data, videos, images } = props;
+  
   const searchInput = useRef(null);
   const [searchText, setSearchText] = useState();
   const [searchedColumn, setSearchedColumn] = useState();
@@ -126,12 +114,29 @@ function UserTable(props) {
     {
       title: "NoVideos",
       dataIndex: "userName",
-      render: (text, record) => record.userName ? record.userName.length : 0,
+      render: (text, record) => {
+        const matchingVideos = videos.reduce((acc, curr) => {
+          if (curr === record.userName) {
+            return acc + 1;
+          }
+          return acc;
+        }, 0);
+        return matchingVideos
+      },
     },
     {
-      title: "NoGalleries",
-      dataIndex: "nogalleries",
-    }
+      title: "NoImages",
+      dataIndex: "userName",
+      render: (text, record) => {
+        const matchingImages = images.reduce((acc, curr) => {
+          if (curr === record.userName) {
+            return acc + 1;
+          }
+          return acc;
+        }, 0);
+        return matchingImages
+      },
+    },
   ];
   const showTotal = (total) => {
     return `Total: ${total} users`;
