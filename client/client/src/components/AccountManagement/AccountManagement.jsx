@@ -1,22 +1,58 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Card, Button, Grid, Checkbox, TextField } from "@mui/material";
+import { Card, Button, Grid, TextField } from "@mui/material";
 import "./AccountManagement.scss";
+import { userApi } from "../../api";
+import {
+  Alert,
+  Snackbar,
+} from "@mui/material";
 
 const AccountManagement = () => {
-  const defaultValues = {
-    Username: "leminhtuong",
-    Fullname: "leminhtuong",
-    Email: "leminhtuong09122002@gmail.com",
-    Phonenumber: "0834091202",
-  };
-
-  const [Username, setUsername] = useState(defaultValues.Username);
-  const [Fullname, setFullname] = useState(defaultValues.Fullname);
-  const [Email, setEmail] = useState(defaultValues.Email);
-  const [Phonenumber, setPhonenumber] = useState(defaultValues.Phonenumber);
+  const currentUsername = localStorage.getItem("username");
+  const [Id, setId] = useState();
+  const [Username, setUsername] = useState(currentUsername);
+  const [Fullname, setFullname] = useState();
+  const [Email, setEmail] = useState();
+  const [Phonenumber, setPhonenumber] = useState();
   const [isEnable, setIsEnable] = useState(false);
-  const [previousValues, setPreviousValues] = useState(null);
+  const [previousValues, setPreviousValues] = useState();
+
+  const [profile, setProfile] = useState({});
+
+  const [noti, setNoti] = useState(false);
+  const [message, setMessage] = useState();
+  const [typeNoti, setTypeNoti] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await userApi.getUserByUsername(currentUsername);
+        setId(response.id);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [currentUsername]);
+
+  useEffect(() => {
+    const fetchData2 = async () => {
+      try {
+        const response2 = await userApi.getUserById(Id);
+        setProfile(response2);
+        setUsername(response2.userName);
+        setFullname(response2.fullName);
+        setPhonenumber(response2.phoneNumber || "");
+        setEmail(response2.email);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData2();
+  }, [Id]);
 
   useEffect(() => {
     if (isEnable) {
@@ -36,7 +72,6 @@ const AccountManagement = () => {
         setFullname(previousValues.Fullname);
         setEmail(previousValues.Email);
         setPhonenumber(previousValues.Phonenumber);
-        // console.log(previousValues);
       }
       setIsEnable(false);
     } else {
@@ -46,10 +81,45 @@ const AccountManagement = () => {
 
   const handleSave = () => {
     setIsEnable(false);
-    // console.log(Username, Fullname, Email, Password, Phonenumber, EmailConfirmed)
+    const updateUserAccount = async () => {
+      try {
+        const updatedProfile = {
+          userName: Username,
+          email: Email,
+          phoneNumber: Phonenumber,
+          fullName: Fullname,
+        };
+
+        await userApi.updateUserAccount(Id, updatedProfile);
+        setProfile(updatedProfile);
+        setNoti(true);
+        setMessage("Update Succeed");
+        setTypeNoti("success");
+      } catch (error) {
+        setNoti(true);
+        setMessage(error.response.data.description);
+        setTypeNoti("error");
+      }
+    };
+
+    updateUserAccount();
   };
   return (
     <>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={noti}
+        autoHideDuration={5000}
+        onClose={() => setNoti(false)}
+      >
+        <Alert
+          onClose={() => setNoti(false)}
+          severity={typeNoti}
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
       <Card
         sx={{
           width: "50%",
@@ -82,6 +152,7 @@ const AccountManagement = () => {
               fullWidth
               required
               disabled={!isEnable}
+              placeholder="Empty"
             />
           </Grid>
           {/* <Grid item xs={0.5}>
@@ -101,6 +172,7 @@ const AccountManagement = () => {
               fullWidth
               required
               disabled={!isEnable}
+              placeholder="Empty"
             />
           </Grid>
 
@@ -118,6 +190,7 @@ const AccountManagement = () => {
               fullWidth
               required
               disabled={!isEnable}
+              placeholder="Empty"
             />
           </Grid>
 
@@ -135,6 +208,7 @@ const AccountManagement = () => {
               fullWidth
               required
               disabled={!isEnable}
+              placeholder="Empty"
             />
           </Grid>
 
@@ -144,10 +218,18 @@ const AccountManagement = () => {
             style={{ display: "flex", justifyContent: "center" }}
           >
             <div className="button_bar">
-              <Button variant="contained" onClick={handleSave} className="button">
+              <Button
+                variant="contained"
+                onClick={handleSave}
+                className="button"
+              >
                 Save
               </Button>
-              <Button variant="contained" onClick={handleEdit} className="button">
+              <Button
+                variant="contained"
+                onClick={handleEdit}
+                className="button"
+              >
                 {isEnable ? "Cancel" : "Edit"}
               </Button>
             </div>

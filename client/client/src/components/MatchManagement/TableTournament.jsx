@@ -2,12 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { Table, Input, Button, Space, DatePicker } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined, CalendarOutlined } from "@ant-design/icons";
-import { Link, IconButton, Tooltip } from "@mui/material";
+import { Link  } from "@mui/material";
 import "../VideoInput/table-video.css";
 import "antd/dist/antd.css";
 
-// import DeleteIcon from "@mui/icons-material/Delete";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 const { RangePicker } = DatePicker;
 function TableTournament(props) {
   const {

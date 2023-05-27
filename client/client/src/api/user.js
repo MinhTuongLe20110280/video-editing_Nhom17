@@ -9,6 +9,18 @@ const userApi = {
     const url = "/Users/SignUp";
     return axiosClient.post(url, body);
   },
+  getUserByUsername: (username) => {
+    const url = `Users/username/${username}`;
+    return axiosClient.get(url);
+  },
+  getUserById: (Id) => {
+    const url = `Users/id/${Id}`;
+    return axiosClient.get(url);
+  },
+  updateUserAccount: (id ,data) => {
+    const url = `Users/${id}`
+    return axiosClient.put(url, data)
+  }
 };
 
 export default userApi;

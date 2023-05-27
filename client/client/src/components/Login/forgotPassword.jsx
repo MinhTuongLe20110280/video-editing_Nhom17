@@ -59,9 +59,10 @@ function ForgotPassword() {
   const [suc, setSuc] = useState(false);
   const [time, setTime] = useState(3);
   let navigate = useNavigate();
-  const [message, setMessage] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState("");
+  const [Email, setEmail] = useState();
+  const [Id, setId] = useState();
   const [errPassword, setErrPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState();
   const [errConfirmPassword, setConfirmErrPassword] = useState(false);
@@ -71,6 +72,10 @@ function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
+  const [message, setMessage] = useState("");
+  const [noti, setNoti] = useState(false);
+  const [typeNoti, setTypeNoti] = useState();
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -93,38 +98,54 @@ function ForgotPassword() {
     }
   }, [errPassword, errConfirmPassword]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!errForm) {
       setLoading(true);
-      const body = {
-        username,
-        password,
-      };
-      const signUp = async () => {
+      const fetchData = async () => {
         try {
-        //   await userApi.signUp(body);
-        //   setTimeout(() => {
-        //     setLoading(false);
-        //     setSuc(true);
-        //     setTimeout(() => {
-        //       setTime(2);
-        //       setTimeout(() => {
-        //         setTime(1);
-        //         setTimeout(() => {
-        //           navigate("/login");
-        //         }, 1000);
-        //       }, 1000);
-        //     }, 1000);
-        //   }, 1000);
-        // console.log(body)
+          const response = await userApi.getUserByUsername(username);
+
+          const updatePassword = async () => {
+            try {
+              const updatedProfile = {
+                userName: username,
+                phoneNumber: response.phoneNumber,
+                fullName: response.fullName,
+                email: response.email,
+                passwordHash: password,
+              };
+
+              await userApi.updateUserAccount(response.id, updatedProfile);
+              setTimeout(() => {
+                setLoading(false);
+                setSuc(true);
+                setTimeout(() => {
+                  setTime(2);
+                  setTimeout(() => {
+                    setTime(1);
+                    setTimeout(() => {
+                      navigate("/login");
+                    }, 1000);
+                  }, 1000);
+                }, 1000);
+              }, 1000);
+            } catch (error) {
+              console.log(error.response.data.description);
+            }
+          };
+          updatePassword();
+          setNoti(true);
+          setMessage("Update Succeed");
+          setTypeNoti("success");
         } catch (error) {
-          setLoading(false);
-          setErr(true);
-          setMessage(error.response.data.description);
+          setNoti(true);
+          setMessage("Update Fail");
+          setTypeNoti("error");
         }
       };
-      signUp();
+
+      fetchData();
     } else {
       setErr(true);
       setMessage("Please meet the conditions");
@@ -187,7 +208,6 @@ function ForgotPassword() {
           onSubmit={handleSubmit}
           autoComplete="false"
         >
-
           <Grid item xs={12}>
             <TextField
               fullWidth

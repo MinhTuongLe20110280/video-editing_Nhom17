@@ -80,6 +80,7 @@ function ResponsiveDrawer(props) {
   const handleLogout = () => {
     Cookies.remove("Token");
     localStorage.removeItem("fullName");
+    localStorage.removeItem("username");
     navigate("/login");
   };
   const handleCollapsed = () => {

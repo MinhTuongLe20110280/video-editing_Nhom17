@@ -23,6 +23,7 @@ const MatchManagement = () => {
     const getTournaments = async () => {
       try {
         const response = await videoEditingApi.getTournaments();
+        console.log(response.data)
         setTournaments(response.data);
       } catch (error) {
         console.log(error);
