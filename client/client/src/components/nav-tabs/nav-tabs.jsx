@@ -26,19 +26,31 @@ import {
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
-import BarChartIcon from '@mui/icons-material/BarChart';
+import BarChartIcon from "@mui/icons-material/BarChart";
+import { useEffect, useState } from "react";
 
 function ResponsiveDrawer(props) {
   const adminUsername = "leminhtuong";
   const isUserAdmin = localStorage.getItem("username") === adminUsername;
 
-  const [collapsed, setCollapsed] = React.useState(true);
-  const [listItem, setListItem] = React.useState(() => {
+  const [Fullname, setFullName] = useState(localStorage.getItem("fullName"));
+  const handleLocalStorageChange = () => {
+    const updatedFullName = localStorage.getItem("fullName");
+    setFullName(updatedFullName);
+  };
+  useEffect(() => {
+    window.addEventListener("storage", handleLocalStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleLocalStorageChange);
+    };
+  }, []);
+  const [collapsed, setCollapsed] = useState(true);
+  const [listItem, setListItem] = useState(() => {
     const listItem = [
-      { 
+      {
         name: "Soccer",
         url: "/",
-        icon: <SportsSoccerIcon /> 
+        icon: <SportsSoccerIcon />,
       },
       {
         name: "Highlight",
@@ -80,7 +92,7 @@ function ResponsiveDrawer(props) {
   const handleLogout = () => {
     Cookies.remove("Token");
     localStorage.removeItem("fullName");
-    localStorage.removeItem("username");
+    localStorage.removeItem("userName");
     navigate("/login");
   };
   const handleCollapsed = () => {
@@ -139,7 +151,7 @@ function ResponsiveDrawer(props) {
           </SidebarContent>
           <SidebarFooter style={{ textAlign: "center" }}>
             <div style={{ fontSize: 12, padding: 1, maxWidth: "100%" }}>
-              WELCOME {localStorage.getItem("fullName")}
+              WELCOME {Fullname}
             </div>
             <div>
               <Tooltip key={1} title="Logout" placement="right">

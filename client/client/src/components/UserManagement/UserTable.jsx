@@ -125,18 +125,12 @@ function UserTable(props) {
     },
     {
       title: "NoVideos",
-      dataIndex: "novideos",
-      ...getColumnSearchProps("novideos"),
-    },
-    {
-      title: "NoHighlights",
-      dataIndex: "nohighlights",
-      ...getColumnSearchProps("nohighlights"),
+      dataIndex: "userName",
+      render: (text, record) => record.userName ? record.userName.length : 0,
     },
     {
       title: "NoGalleries",
       dataIndex: "nogalleries",
-      ...getColumnSearchProps("nogalleries"),
     }
   ];
   const showTotal = (total) => {

@@ -3,10 +3,7 @@ import { useState, useEffect } from "react";
 import { Card, Button, Grid, TextField } from "@mui/material";
 import "./AccountManagement.scss";
 import { userApi } from "../../api";
-import {
-  Alert,
-  Snackbar,
-} from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 
 const AccountManagement = () => {
   const currentUsername = localStorage.getItem("username");
@@ -92,9 +89,13 @@ const AccountManagement = () => {
 
         await userApi.updateUserAccount(Id, updatedProfile);
         setProfile(updatedProfile);
+        localStorage.removeItem("fullName", Fullname);
+        localStorage.removeItem("userName", Username);
+        localStorage.setItem("fullName", Fullname);
         setNoti(true);
         setMessage("Update Succeed");
         setTypeNoti("success");
+        window.location.reload();
       } catch (error) {
         setNoti(true);
         setMessage(error.response.data.description);
