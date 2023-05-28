@@ -17,6 +17,7 @@ import TableHighlight from "./TableHighlight";
 import { ConfirmDialog } from "../flugin";
 import { Typography } from "antd";
 import TableFilterHL from "../HiglightFilter/TableFilterHL";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 function HighlightReview(props) {
   const { highlights, getHighlight, mode, downloadNoMerge } = props;
@@ -75,23 +76,23 @@ function HighlightReview(props) {
     setOpenDConfirm(true);
   };
   useEffect(() => {
-    window.addEventListener('error', e => {
-        if (e.message === 'ResizeObserver loop limit exceeded') {
-            const resizeObserverErrDiv = document.getElementById(
-                'webpack-dev-server-client-overlay-div'
-            );
-            const resizeObserverErr = document.getElementById(
-                'webpack-dev-server-client-overlay'
-            );
-            if (resizeObserverErr) {
-                resizeObserverErr.setAttribute('style', 'display: none');
-            }
-            if (resizeObserverErrDiv) {
-                resizeObserverErrDiv.setAttribute('style', 'display: none');
-            }
+    window.addEventListener("error", (e) => {
+      if (e.message === "ResizeObserver loop limit exceeded") {
+        const resizeObserverErrDiv = document.getElementById(
+          "webpack-dev-server-client-overlay-div"
+        );
+        const resizeObserverErr = document.getElementById(
+          "webpack-dev-server-client-overlay"
+        );
+        if (resizeObserverErr) {
+          resizeObserverErr.setAttribute("style", "display: none");
         }
+        if (resizeObserverErrDiv) {
+          resizeObserverErrDiv.setAttribute("style", "display: none");
+        }
+      }
     });
-}, []);
+  }, []);
   return (
     <>
       <Backdrop
@@ -173,6 +174,21 @@ function HighlightReview(props) {
           handleIconDeleteClick={handleIconDeleteClick}
         />
       )}
+      <div
+        onClick={() => {
+          window.location.reload();
+        }}
+        style={{
+          cursor: "pointer",
+          marginTop: "24px",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
+      >
+        <span style={{ marginRight: "12px" }}>Click Here To Refresh Page</span>
+        <RefreshIcon />
+      </div>
     </>
   );
 }

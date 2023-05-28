@@ -5,6 +5,10 @@ const videoEditingApi = {
     const url = "/VideoEditings/getMatch";
     return axiosClient.get(url);
   },
+  getAllMatches: () => {
+    const url = "/VideoEditings/getAllMatch";
+    return axiosClient.get(url);
+  },
 
   updateAll: (id, checked) => {
     const url = `/VideoEditings/updateAll/${id}?selected=${checked}`;
@@ -135,6 +139,10 @@ const videoEditingApi = {
   },
   getGallery: (type) => {
     const url = `/VideoEditings/getGallery?type=${type}`;
+    return axiosClient.get(url);
+  },
+  getAllGalleries: (type) => {
+    const url = `/VideoEditings/getAllGallery?type=${type}`;
     return axiosClient.get(url);
   },
   saveToGallery: (formdata) => {

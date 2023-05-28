@@ -1,10 +1,42 @@
 version: "3.8"
 services:
-  app:
-    container_name: video-analysis
-    image: video-analysis
+  front-end:
+    container_name: FE-video-analysis
     build:
-      context: ./FClient/client
-      target: production
+      context: ./client/client
+      dockerfile: dockerfile
     ports:
-      - "5002:80"
+      - "3000:80"
+    networks:
+      - video-analysis
+    depends_on:
+      - backend
+  database:
+    container_name: mongodb
+    image: mongo
+    ports:
+      - 27018:27017
+    command: mongod --bind_ip_all
+    networks:
+      - video-analysis
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    container_name: BE-video-analysis
+    build:
+      context: ./server/video-editing-api/video-editing-api
+      dockerfile: Dockerfile
+    ports:
+      - 5001:80  
+    depends_on:
+      - database
+    networks:
+      - video-analysis
+  
+networks:
+  video-analysis:
+    driver: bridge
+
+volumes:
+  mongodb_data:
