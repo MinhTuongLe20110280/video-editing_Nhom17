@@ -14,6 +14,7 @@ function UserTable(props) {
   const [searchedColumn, setSearchedColumn] = useState();
   const [users, setData] = useState([]);
   const [temp, setTemp] = useState({});
+
   const [Id, setId] = useState();
 
   const [noti, setNoti] = useState(false);
@@ -156,15 +157,19 @@ function UserTable(props) {
         const matchingUser = users.find(
           (user) => user.userName === record.userName
         );
+
         const isAdmin = matchingUser ? matchingUser.isAdmin : true;
+
 
         const handleCheckboxChange = () => {
           const newData = users.map((user) => {
             if (user.userName === record.userName) {
+
               const temp = { ...user, isAdmin: !isAdmin };
               setTemp(temp);
               setId(temp.id);
               return temp;
+
             }
             return user;
           });
@@ -210,6 +215,7 @@ function UserTable(props) {
   };
 
 
+
   const handleSave = async () => {
     try {
       const updatedProfile = {
@@ -227,6 +233,7 @@ function UserTable(props) {
       setTypeNoti("error");
     }
   };
+
   return (
     <>
       <Snackbar
