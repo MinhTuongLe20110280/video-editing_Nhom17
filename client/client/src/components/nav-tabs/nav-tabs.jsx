@@ -28,10 +28,37 @@ import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import { useEffect, useState } from "react";
+import userApi from "../../api/user";
 
 function ResponsiveDrawer(props) {
-  const adminUsername = "leminhtuong";
-  const isUserAdmin = localStorage.getItem("username") === adminUsername;
+  const [users, setUsers] = useState([]);
+
+  const getUsers = async () => {
+    try {
+      const response = await userApi.getAllUsers();
+      // setUsers(response);
+      setUsers(response.map((user) => ({
+        userName: user.userName,
+        emailConfirmed: user.emailConfirmed,
+      })))
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  const adminUsername = localStorage.getItem("username");
+  var isAdmin = false;
+  users.forEach((user) => {
+    if (user.userName === adminUsername) {
+      if (user.emailConfirmed === true) {
+        isAdmin = true;
+      }
+    }
+  })
 
   const [Fullname, setFullName] = useState(localStorage.getItem("fullName"));
   const handleLocalStorageChange = () => {
@@ -68,7 +95,7 @@ function ResponsiveDrawer(props) {
         icon: <ManageAccountsIcon />,
       },
     ];
-    if (isUserAdmin) {
+    if (!isAdmin) {
       listItem.push({
         name: "User Management",
         url: "/usermanagement",
