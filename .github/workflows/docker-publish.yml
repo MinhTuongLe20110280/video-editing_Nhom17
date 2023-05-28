@@ -43,9 +43,9 @@ jobs:
         with:
           host: ec2-18-204-221-190.compute-1.amazonaws.com
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          run: |
-            sudo su
-            cd compose
-            docker compose down
-            docker compose pull
-            docker compose up -d
+        run: |
+          sudo su
+          cd compose
+          docker compose down
+          docker compose pull
+          docker compose up -d
