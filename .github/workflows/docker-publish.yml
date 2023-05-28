@@ -42,11 +42,11 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ec2-18-212-67-206.compute-1.amazonaws.com
-          username: ubuntu
+          username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             sudo su
             cd compose
-            docker-compose down
-            docker-compose pull
-            docker-compose up -d
+            docker compose down
+            docker compose pull
+            docker compose up -d
