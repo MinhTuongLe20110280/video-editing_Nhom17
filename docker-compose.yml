@@ -38,6 +38,5 @@ services:
   
 networks:
   video-analysis:
-
 volumes:
   mongodb_data:
