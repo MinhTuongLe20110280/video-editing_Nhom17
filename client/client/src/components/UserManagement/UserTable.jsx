@@ -11,6 +11,10 @@ function UserTable(props) {
   const [searchText, setSearchText] = useState();
   const [searchedColumn, setSearchedColumn] = useState();
   const [users, setData] = useState([]);
+<<<<<<< HEAD
+  const [temp, setTemp] = useState({});
+=======
+>>>>>>> main
 
   useEffect(() => {
     // Set the initial users data when props.data changes
@@ -145,13 +149,26 @@ function UserTable(props) {
       title: "IsAdmin",
       dataIndex: "userName",
       render: (text, record) => {
+<<<<<<< HEAD
+        const matchingUser = users.find(
+          (user) => user.userName === record.userName
+        );
+        const isAdmin = matchingUser ? matchingUser.emailConfirmed : true;
+=======
         const matchingUser = users.find((user) => user.userName === record.userName);
         const isAdmin = matchingUser ? matchingUser.emailConfirmed : false;
+>>>>>>> main
 
         const handleCheckboxChange = () => {
           const newData = users.map((user) => {
             if (user.userName === record.userName) {
+<<<<<<< HEAD
+              const temp  = { ...user, emailConfirmed: !isAdmin }
+              setTemp(temp)
+              return temp
+=======
               return { ...user, emailConfirmed: !isAdmin };
+>>>>>>> main
             }
             return user;
           });
@@ -161,6 +178,37 @@ function UserTable(props) {
 
         return (
           <div>
+<<<<<<< HEAD
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginBottom: "4px",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={isAdmin}
+                onChange={handleCheckboxChange}
+              />
+              <span>{isAdmin ? "true" : "false"}</span>
+            </div>
+            <Button
+              variant="contained"
+              onClick={handleSave}
+              style={{
+                backgroundColor: "#1565c0",
+                color: "white",
+                borderRadius: "5px",
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        );
+      },
+    },
+=======
             <span>{isAdmin ? "true" : "false"}</span>
             <br />
             <input
@@ -172,12 +220,19 @@ function UserTable(props) {
         );
       },
     }
+>>>>>>> main
   ];
 
   const showTotal = (total) => {
     return `Total: ${total} users`;
   };
 
+<<<<<<< HEAD
+  const handleSave = () => {
+    console.log(temp)
+  }
+=======
+>>>>>>> main
   return (
     <Table
       bordered
