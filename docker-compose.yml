@@ -1,11 +1,11 @@
 version: "3.8"
 services:
   front-end:
-    container_name: FE-video-analysis
-    # build:
-    #   context: ./client/client
-    #   dockerfile: dockerfile
-    image: lamnguyen0206/frontend    
+    container_name: frontend-container
+    build:
+      context: ./client/client
+      dockerfile: dockerfile
+    #image: lamnguyen0206/frontend
     ports:
       - "3000:80"
     networks:
@@ -24,7 +24,7 @@ services:
       - mongodb_data:/data/db
 
   backend:
-    container_name: BE-video-analysis
+    container_name: backend-container
     # build:
     #   context: ./server/video-editing-api/video-editing-api
     #   dockerfile: Dockerfile

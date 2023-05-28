@@ -11,6 +11,7 @@ function UserTable(props) {
   const [searchText, setSearchText] = useState();
   const [searchedColumn, setSearchedColumn] = useState();
   const [users, setData] = useState([]);
+  const [temp, setTemp] = useState({});
 
   useEffect(() => {
     // Set the initial users data when props.data changes
@@ -145,13 +146,17 @@ function UserTable(props) {
       title: "IsAdmin",
       dataIndex: "userName",
       render: (text, record) => {
-        const matchingUser = users.find((user) => user.userName === record.userName);
-        const isAdmin = matchingUser ? matchingUser.emailConfirmed : false;
+        const matchingUser = users.find(
+          (user) => user.userName === record.userName
+        );
+        const isAdmin = matchingUser ? matchingUser.emailConfirmed : true;
 
         const handleCheckboxChange = () => {
           const newData = users.map((user) => {
             if (user.userName === record.userName) {
-              return { ...user, emailConfirmed: !isAdmin };
+              const temp  = { ...user, emailConfirmed: !isAdmin }
+              setTemp(temp)
+              return temp
             }
             return user;
           });
@@ -161,23 +166,44 @@ function UserTable(props) {
 
         return (
           <div>
-            <span>{isAdmin ? "true" : "false"}</span>
-            <br />
-            <input
-              type="checkbox"
-              checked={isAdmin}
-              onChange={handleCheckboxChange}
-            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginBottom: "4px",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={isAdmin}
+                onChange={handleCheckboxChange}
+              />
+              <span>{isAdmin ? "true" : "false"}</span>
+            </div>
+            <Button
+              variant="contained"
+              onClick={handleSave}
+              style={{
+                backgroundColor: "#1565c0",
+                color: "white",
+                borderRadius: "5px",
+              }}
+            >
+              Save
+            </Button>
           </div>
         );
       },
-    }
+    },
   ];
 
   const showTotal = (total) => {
     return `Total: ${total} users`;
   };
 
+  const handleSave = () => {
+    console.log(temp)
+  }
   return (
     <Table
       bordered
