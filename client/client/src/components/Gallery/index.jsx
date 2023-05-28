@@ -59,7 +59,6 @@ function Gallery() {
   const [typeNoti, setTypeNoti] = useState();
 
   const [gallery, setGallery] = useState([]);
-  console.log(gallery);
 
   const getGallery = async () => {
     try {

@@ -2,20 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { Table, Input, Button, Space, DatePicker } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined, CalendarOutlined } from "@ant-design/icons";
-import { Link, IconButton, Tooltip } from "@mui/material";
+import { Link  } from "@mui/material";
 import "../VideoInput/table-video.css";
 import "antd/dist/antd.css";
 
-// import DeleteIcon from "@mui/icons-material/Delete";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 const { RangePicker } = DatePicker;
-function TableTournament(props) {
+function MatchTable(props) {
   const {
     data,
     titleSearch,
     handleResultClick,
-    handleIconUploadClick,
-    // handleIconDeleteClick,
   } = props;
 
   const [titleS, setTitleS] = useState();
@@ -167,25 +163,14 @@ function TableTournament(props) {
         dateStart.getTime() <= date.getTime();
       return isInRange ? record[dataIndex] : "";
     },
-    // onFilterDropdownVisibleChange: (visible) => {
-    //   if (visible) {
-    //     setTimeout(() => searchInputDate.current.select(), 100);
-    //   }
-    // },
-    // render: (text) =>
-    //   searchedColumn === dataIndex ? (
-    //     <Highlighter
-    //       highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-    //       searchWords={[searchText]}
-    //       autoEscape
-    //       textToHighlight={text ? text.toString() : ""}
-    //     />
-    //   ) : (
-    //     text
-    //   ),
   });
 
   const columns = [
+    {
+      title: "Owner",
+      dataIndex: "username",
+      ...getColumnSearchProps("username"),
+    },
     {
       title: "Title",
       dataIndex: "tournametName",
@@ -246,43 +231,6 @@ function TableTournament(props) {
           );
       },
     },
-    {
-      title: "Upload",
-      render: (row) => {
-        return (
-          <Tooltip
-            key={12345}
-            title="Change/Upload Json file for match"
-            placement="top"
-          >
-            <IconButton
-              onClick={() => {
-                handleIconUploadClick(row);
-              }}
-            >
-              <CloudUploadIcon />
-            </IconButton>
-          </Tooltip>
-        );
-      },
-    },
-    // {
-    //   title: "Delete",
-    //   render: (row) => {
-    //     return (
-    //       <Tooltip key={123} title="Delete Match" placement="top">
-    //         <IconButton
-    //           aria-label="delete"
-    //           onClick={(e) => {
-    //             handleIconDeleteClick(row);
-    //           }}
-    //         >
-    //           <DeleteIcon />
-    //         </IconButton>
-    //       </Tooltip>
-    //     );
-    //   },
-    // },
   ];
   const showTotal = (total) => {
     return `Total: ${total} match`;
@@ -297,4 +245,4 @@ function TableTournament(props) {
   );
 }
 
-export default TableTournament;
+export default MatchTable;
