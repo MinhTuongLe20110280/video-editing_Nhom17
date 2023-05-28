@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Table, Input, Button, Space } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
@@ -6,12 +6,16 @@ import "../VideoInput/table-video.css";
 import "antd/dist/antd.css";
 
 function UserTable(props) {
-  //   const { data, titleSearch, handleResultClick } = props;
   const { data, videos, images } = props;
-  
   const searchInput = useRef(null);
   const [searchText, setSearchText] = useState();
   const [searchedColumn, setSearchedColumn] = useState();
+  const [users, setData] = useState([]);
+
+  useEffect(() => {
+    // Set the initial users data when props.data changes
+    setData(data);
+  }, [data]);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -121,7 +125,7 @@ function UserTable(props) {
           }
           return acc;
         }, 0);
-        return matchingVideos
+        return matchingVideos;
       },
     },
     {
@@ -134,19 +138,52 @@ function UserTable(props) {
           }
           return acc;
         }, 0);
-        return matchingImages
+        return matchingImages;
       },
     },
+    {
+      title: "IsAdmin",
+      dataIndex: "userName",
+      render: (text, record) => {
+        const matchingUser = users.find((user) => user.userName === record.userName);
+        const isAdmin = matchingUser ? matchingUser.emailConfirmed : false;
+
+        const handleCheckboxChange = () => {
+          const newData = users.map((user) => {
+            if (user.userName === record.userName) {
+              return { ...user, emailConfirmed: !isAdmin };
+            }
+            return user;
+          });
+
+          setData(newData);
+        };
+
+        return (
+          <div>
+            <span>{isAdmin ? "true" : "false"}</span>
+            <br />
+            <input
+              type="checkbox"
+              checked={isAdmin}
+              onChange={handleCheckboxChange}
+            />
+          </div>
+        );
+      },
+    }
   ];
+
   const showTotal = (total) => {
     return `Total: ${total} users`;
   };
+
   return (
     <Table
       bordered
       pagination={{ showTotal: showTotal, showSizeChanger: true }}
       columns={columns}
-      dataSource={data}
+      dataSource={users.map((item, index) => ({ ...item, key: index }))}
     />
   );
 }
