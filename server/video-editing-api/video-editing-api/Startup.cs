@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using video_editing_api.Model;
@@ -55,6 +56,12 @@ namespace video_editing_api
             services.AddIdentity<AppUser, AppRole>()
                 .AddMongoDbStores<AppUser, AppRole, Guid>(mongoDbSettings.ConnectionString, mongoDbSettings.DbName);
             #endregion
+
+            services.AddScoped<IMongoCollection<AppUser>>(sp =>
+            {
+                var dbClient = sp.GetRequiredService<IDbClient>();
+                return dbClient.GetUserCollection();
+            });
 
             services.Configure<DbConfig>(Configuration.GetSection(SystemConstants.DbConfig));
             #region Add Service

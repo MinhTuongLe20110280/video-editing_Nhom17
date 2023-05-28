@@ -39,8 +39,9 @@ namespace video_editing_api.Service.VideoEditing
         private readonly IMongoCollection<HighlightVideo> _highlight;
         private readonly IMongoCollection<TagEvent> _tagEvent;
         private readonly IMongoCollection<TeamOfLeague> _teamOfLeague;
-        private readonly IMongoCollection<Gallery> _gallery;
+        private readonly IMongoCollection<Team> _team;
 
+        private readonly IMongoCollection<Gallery> _gallery;
         private readonly IHubContext<NotiHub> _hub;
         private readonly IMapper _mapper;
         private IHttpClientFactory _clientFactory;
@@ -56,18 +57,17 @@ namespace video_editing_api.Service.VideoEditing
             _tagEvent = dbClient.GetTagEventCollection();
             _teamOfLeague = dbClient.GetTeamOfLeagueCollection();
             _gallery = dbClient.GetGalleryCollection();
+            _team = dbClient.GetTeamCollection();
             _clientFactory = clientFactory;
             _config = config;
             _hub = hub;
             _pathClientSecret = Path.Combine(webHostEnvironment.ContentRootPath, "Cert", "client_secret.json");
-
             _mapper = mapper;
         }
 
         public VideoEditingService()
         {
         }
-
 
         #region Tournament      
         public async Task<List<Tournament>> GetTournament()
@@ -81,6 +81,7 @@ namespace video_editing_api.Service.VideoEditing
                 throw new System.Exception(e.Message);
             }
         }
+
         public async Task<string> AddTournament(List<Tournament> tournaments)
         {
             try
@@ -94,8 +95,6 @@ namespace video_editing_api.Service.VideoEditing
             }
         }
         #endregion
-
-
 
         #region MatchInfo
         public async Task<MatchInfo> GetInfoOfMatch(string id)
@@ -126,6 +125,7 @@ namespace video_editing_api.Service.VideoEditing
                 throw new System.Exception(e.Message);
             }
         }
+
         public async Task<List<MatchInfo>> GetMatchInfo(string username)
         {
             try
@@ -144,6 +144,7 @@ namespace video_editing_api.Service.VideoEditing
                                Port = m.Port,
                                TournametName = t.Name,
                                IsUploadJsonFile = m.IsUploadJsonFile,
+                               Username = m.Username
                                //Videos = m.Videos,
                            }).ToList();
 
@@ -154,6 +155,7 @@ namespace video_editing_api.Service.VideoEditing
                 throw new System.Exception(e.Message);
             }
         }
+
         public async Task<string> AddMatchInfo(string username, MatchInfo matchInfo)
         {
             try
@@ -217,7 +219,6 @@ namespace video_editing_api.Service.VideoEditing
         }
         #endregion
 
-
         public async Task<List<HighlightVideo>> GetHighlightVideos()
         {
             try
@@ -229,7 +230,6 @@ namespace video_editing_api.Service.VideoEditing
                 throw new System.Exception(e.Message);
             }
         }
-
 
         public async Task<string> ConcatVideoOfMatch(string username, ConcatModel concatModel)
         {
@@ -382,7 +382,6 @@ namespace video_editing_api.Service.VideoEditing
         }
 
 
-
         public async Task<List<string>> NotConcatVideoOfMatch(string username, ConcatModel concatModel)
         {
             try
@@ -436,7 +435,6 @@ namespace video_editing_api.Service.VideoEditing
                 throw new System.Exception(ex.Message);
             }
         }
-
 
 
         #region Download File    
@@ -582,8 +580,6 @@ namespace video_editing_api.Service.VideoEditing
                 throw new System.Exception(ex.Message);
             }
         }
-
-
         #endregion
 
         #region tag
@@ -1069,6 +1065,94 @@ namespace video_editing_api.Service.VideoEditing
 
             return !jsonString.Contains("error_description");
         }
+
+        public Task<List<MatchInfo>> GetAllMatchInfo()
+        {
+            try
+            {
+                var res = (from m in _matchInfo.AsQueryable()
+                           join t in _tournament.AsQueryable() on m.TournamentId equals t.Id
+                           select new MatchInfo
+                           {
+                               Id = m.Id,
+                               TournamentId = m.TournamentId,
+                               Channel = m.Channel,
+                               Ip = m.Ip,
+                               MactchTime = m.MactchTime,
+                               MatchName = m.MatchName,
+                               Port = m.Port,
+                               TournametName = t.Name,
+                               IsUploadJsonFile = m.IsUploadJsonFile,
+                               Username = m.Username
+                               //Videos = m.Videos,
+                           }).ToList();
+
+                return Task.FromResult(res.OrderByDescending(m => m.MactchTime).ToList());
+            }
+            catch (System.Exception e)
+            {
+                throw new System.Exception(e.Message);
+            }
+        }
+
+        public Task<List<Gallery>> GetAllGalley(int Type)
+        {
+            try
+            {
+                if (Type != -1)
+                {
+                    return _gallery.Find(gal => gal.Type == Type).ToListAsync();
+                }
+                else
+                {
+                    return _gallery.Find(_ => true).ToListAsync(); // Return all the galleries
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Team>> GetAllTeam(string leagueId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(leagueId)) return _team.Find(_ => true).ToList();
+
+                var team = await _teamOfLeague.Find(team => team.TournamentId == leagueId).FirstOrDefaultAsync();
+
+                if (team == null)
+                {
+                    List<Team> teams = new List<Team>();
+                    var matchs = _matchInfo.Find(x =>x.TournamentId == leagueId && x.IsUploadJsonFile).ToList();
+                    foreach (var match in matchs)
+                    {
+                        foreach (var item in match.JsonFile.teams)
+                        {
+                            if (!teams.Any(t => t.TeamName.ToLower() == item.ToLower()))
+                            {
+                                teams.Add(new Team(item));
+                            }
+                        }
+                    }
+
+                    team = new TeamOfLeague();
+                    team.TournamentId = leagueId;
+                    team.Team = teams;
+                    _teamOfLeague.InsertOne(team);
+
+                    return teams;
+                }
+                else
+                    return team.Team;
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message);
+            }
+        }
         #endregion
     }
 }
+

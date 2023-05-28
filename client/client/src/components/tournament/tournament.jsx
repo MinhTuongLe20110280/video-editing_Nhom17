@@ -23,6 +23,8 @@ import { useNavigate } from "react-router-dom";
 import { FileUploader } from "react-drag-drop-files";
 import TableTournament from "./TableTournament";
 
+import RefreshIcon from "@mui/icons-material/Refresh";
+
 const Tournament = () => {
   const [opendialog, setOpenDialog] = useState(false);
   const [matches, setMatches] = useState([]);
@@ -417,6 +419,22 @@ const Tournament = () => {
         handleIconUploadClick={handleIconUploadClick}
         handleIconDeleteClick={handleIconDeleteClick}
       />
+
+      <div
+        onClick={() => {
+          window.location.reload();
+        }}
+        style={{
+          cursor: "pointer",
+          marginTop: "24px",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
+      >
+        <span style={{ marginRight: "12px" }}>Click Here To Refresh Page</span>
+        <RefreshIcon />
+      </div>
     </>
   );
 };

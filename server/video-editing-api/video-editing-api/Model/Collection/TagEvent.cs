@@ -13,7 +13,6 @@ namespace video_editing_api.Model.Collection
 
     }
 
-
     public class Tag
     {
         public Tag(string tagName)
@@ -23,6 +22,7 @@ namespace video_editing_api.Model.Collection
 
         public string TagName { get; set; }
     }
+
     public class Team
     {
         public Team(string teamName)

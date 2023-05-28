@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using video_editing_api.Model;
 using video_editing_api.Model.Collection;
 using video_editing_api.Model.InputModel;
+using System.Linq;
+using video_editing_api.Service.User;
+using Microsoft.AspNetCore.Http;
 
 namespace video_editing_api.Controllers
 {
@@ -20,18 +23,29 @@ namespace video_editing_api.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IUserService _userService;
         private readonly IConfiguration _config;
-        public UsersController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config)
+
+        public UsersController(IUserService userService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _userService = userService;
             _config = config;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok();
+            try
+            {
+                var users = await _userService.GetAllUser();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving users: {ex.Message}");
+            }
         }
 
 
@@ -129,6 +143,55 @@ namespace video_editing_api.Controllers
                 return BadRequest(new Response<string>(400, e.Message, null));
             }
 
+        }
+
+     
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUserById(Guid id, [FromBody] AppUser updatedUser)
+        {
+            var user = await _userService.GetUserById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.UserName = updatedUser.UserName;
+            user.Email = updatedUser.Email;
+            user.PhoneNumber = updatedUser.PhoneNumber;
+            user.FullName = updatedUser.FullName;
+            user.PasswordHash = updatedUser.PasswordHash; // cập nhật thêm thuộc tính PasswordHash
+
+            var updated = await _userService.UpdateUserById(id, user);
+
+            return Ok(updated);
+        }
+
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetUserById(Guid id)
+        {
+            var user = await _userService.GetUserById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        [HttpGet("username/{username}")]
+        public async Task<IActionResult> GetUserByUsername(string username)
+        {
+            var user = await _userService.GetUserByUsername(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
     }
 }
