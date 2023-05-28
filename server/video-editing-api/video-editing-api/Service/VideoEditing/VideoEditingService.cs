@@ -236,7 +236,7 @@ namespace video_editing_api.Service.VideoEditing
             try
             {
                 var match = _matchInfo.Find(x => x.Id == concatModel.MatchId).First();
-                //var eventNotQualified = match.JsonFile.Event.Where(x => x.selected == 0).ToList();
+                var eventNotQualified = match.JsonFile.Event.Where(x => x.selected == 0).ToList();
                 var inputSend = handlePreSendServer(concatModel.JsonFile);
 
                 //if (inputSend.logo.Count == 0) inputSend.logo.Add(new List<string>());
