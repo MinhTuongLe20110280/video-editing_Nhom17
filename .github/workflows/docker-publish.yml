@@ -45,6 +45,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            sudo su
+            cd compose
             docker-compose down
             docker-compose pull
             docker-compose up -d
