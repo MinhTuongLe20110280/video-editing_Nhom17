@@ -38,11 +38,12 @@ jobs:
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest .
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
+
       - name: Deploy to Server EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ec2-18-212-67-206.compute-1.amazonaws.com
-          username: root
+          host: ec2-18-204-221-190.compute-1.amazonaws.com
+          username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             sudo su
