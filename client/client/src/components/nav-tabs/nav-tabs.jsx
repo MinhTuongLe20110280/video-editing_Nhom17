@@ -36,10 +36,9 @@ function ResponsiveDrawer(props) {
   const getUsers = async () => {
     try {
       const response = await userApi.getAllUsers();
-      // setUsers(response);
       setUsers(response.map((user) => ({
         userName: user.userName,
-        emailConfirmed: user.emailConfirmed,
+        isAdmin: user.isAdmin,
       })))
     } catch (error) {
       console.log(error);
@@ -51,11 +50,11 @@ function ResponsiveDrawer(props) {
   }, []);
 
   const adminUsername = localStorage.getItem("username");
-  var isAdmin = false;
+  var IsADMIN = false;
   users.forEach((user) => {
     if (user.userName === adminUsername) {
-      if (user.emailConfirmed === true) {
-        isAdmin = true;
+      if (user.isAdmin === true) {
+        IsADMIN = true;
       }
     }
   })
@@ -72,7 +71,7 @@ function ResponsiveDrawer(props) {
     };
   }, []);
   const [collapsed, setCollapsed] = useState(true);
-  const [listItem, setListItem] = useState(() => {
+  const generateListItems = () => {
     const listItem = [
       {
         name: "Soccer",
@@ -95,7 +94,8 @@ function ResponsiveDrawer(props) {
         icon: <ManageAccountsIcon />,
       },
     ];
-    if (!isAdmin) {
+
+    if (IsADMIN) {
       listItem.push({
         name: "User Management",
         url: "/usermanagement",
@@ -114,7 +114,9 @@ function ResponsiveDrawer(props) {
     }
 
     return listItem;
-  });
+  };
+
+  const listItem = generateListItems();
   let navigate = useNavigate();
   const handleLogout = () => {
     Cookies.remove("Token");

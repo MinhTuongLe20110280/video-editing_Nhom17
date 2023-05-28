@@ -62,7 +62,6 @@ function ForgotPassword() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState("");
   const [Email, setEmail] = useState();
-  const [Id, setId] = useState();
   const [errPassword, setErrPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState();
   const [errConfirmPassword, setConfirmErrPassword] = useState(false);
@@ -102,6 +101,7 @@ function ForgotPassword() {
     e.preventDefault();
     if (!errForm) {
       setLoading(true);
+
       const fetchData = async () => {
         try {
           let response;
@@ -144,6 +144,7 @@ function ForgotPassword() {
             fullName: response.fullName,
             email: response.email,
             passwordHash: password,
+            isAdmin: response.isAdmin
           };
 
           await userApi.updateUserAccount(response.id, updatedProfile);

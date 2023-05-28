@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using System;
@@ -87,11 +88,7 @@ namespace video_editing_api.Service.User
             {
                 var filter = Builders<AppUser>.Filter.Eq(u => u.Id, id);
 
-                var update = Builders<AppUser>.Update
-                    .Set(u => u.UserName, updatedUser.UserName)
-                    .Set(u => u.Email, updatedUser.Email)
-                    .Set(u => u.PhoneNumber, updatedUser.PhoneNumber)
-                    .Set(u => u.FullName, updatedUser.FullName);
+                var update = Builders<AppUser>.Update.Set(u => u.IsAdmin, updatedUser.IsAdmin);
 
                 if (!string.IsNullOrEmpty(updatedUser.PasswordHash))
                 {
@@ -101,6 +98,25 @@ namespace video_editing_api.Service.User
                     var hashedPassword = hasher.HashPassword(updatedUser, updatedUser.PasswordHash);
 
                     update = update.Set(u => u.PasswordHash, hashedPassword);
+                }
+
+                if (!string.IsNullOrEmpty(updatedUser.UserName)) {       
+                    update = update.Set(u => u.UserName, updatedUser.UserName);
+                }
+
+                if (!string.IsNullOrEmpty(updatedUser.Email))
+                {
+                    update = update.Set(u => u.Email, updatedUser.Email);
+                }
+
+                if (!string.IsNullOrEmpty(updatedUser.PhoneNumber))
+                {
+                    update = update.Set(u => u.PhoneNumber, updatedUser.PhoneNumber);
+                }
+
+                if (!string.IsNullOrEmpty(updatedUser.FullName))
+                {
+                    update = update.Set(u => u.FullName, updatedUser.FullName);
                 }
 
                 var options = new FindOneAndUpdateOptions<AppUser>
