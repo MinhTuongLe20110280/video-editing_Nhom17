@@ -2,9 +2,10 @@ version: "3.8"
 services:
   front-end:
     container_name: FE-video-analysis
-    build:
-      context: ./client/client
-      dockerfile: dockerfile
+    # build:
+    #   context: ./client/client
+    #   dockerfile: dockerfile
+    image: lamnguyen0206/frontend
     ports:
       - "3000:80"
     networks:
@@ -24,9 +25,10 @@ services:
 
   backend:
     container_name: BE-video-analysis
-    build:
-      context: ./server/video-editing-api/video-editing-api
-      dockerfile: Dockerfile
+    # build:
+    #   context: ./server/video-editing-api/video-editing-api
+    #   dockerfile: Dockerfile
+    image: lamnguyen0206/backend
     ports:
       - 5001:80  
     depends_on:
