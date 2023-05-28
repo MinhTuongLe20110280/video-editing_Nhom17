@@ -161,6 +161,7 @@ namespace video_editing_api.Controllers
             user.Email = updatedUser.Email;
             user.PhoneNumber = updatedUser.PhoneNumber;
             user.FullName = updatedUser.FullName;
+            user.IsAdmin = updatedUser.IsAdmin;
             user.PasswordHash = updatedUser.PasswordHash; // cập nhật thêm thuộc tính PasswordHash
 
             var updated = await _userService.UpdateUserById(id, user);
