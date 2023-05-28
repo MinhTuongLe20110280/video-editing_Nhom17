@@ -6,6 +6,7 @@ import "../VideoInput/table-video.css";
 import "antd/dist/antd.css";
 import { userApi } from "../../api";
 import { Alert, Snackbar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function UserTable(props) {
   const { data, videos, images } = props;
@@ -20,6 +21,7 @@ function UserTable(props) {
   const [noti, setNoti] = useState(false);
   const [message, setMessage] = useState();
   const [typeNoti, setTypeNoti] = useState();
+  let navigate = useNavigate();
 
   useEffect(() => {
     // Set the initial users data when props.data changes
@@ -221,18 +223,33 @@ function UserTable(props) {
       const updatedProfile = {
         isAdmin: temp.isAdmin,
       };
-
-      await userApi.updateUserAccount(Id, updatedProfile);
-      setNoti(true);
-      setMessage("Update Succeed");
-      setTypeNoti("success");
-      window.location.reload();
+  
+      const currentUsername = localStorage.getItem("username");
+  
+      
+      if (currentUsername === temp.userName) {
+        await userApi.updateUserAccount(Id, updatedProfile);
+        setNoti(true);
+        setMessage("Update Succeed");
+        setTypeNoti("success");
+        navigate("/"); 
+        window.location.reload();
+      } else {
+        await userApi.updateUserAccount(Id, updatedProfile);
+        setNoti(true);
+        setMessage("Update Succeed");
+        setTypeNoti("success");
+        window.location.reload();
+      }
+  
+     
     } catch (error) {
       setNoti(true);
       setMessage(error.response.data.description);
       setTypeNoti("error");
     }
   };
+  
 
   return (
     <>
