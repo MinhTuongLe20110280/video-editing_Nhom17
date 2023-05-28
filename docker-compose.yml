@@ -2,16 +2,16 @@ version: "3.8"
 services:
   front-end:
     container_name: frontend-container
-    # build:
-    #   context: ./client/client
-    #   dockerfile: dockerfile
-    image: lamnguyen0206/frontend
+    build:
+      context: ./client/client
+      dockerfile: dockerfile
+    #image: lamnguyen0206/frontend
     ports:
       - "3000:80"
     networks:
       - video-analysis
     depends_on:
-      - backend
+      - back-end
   database:
     container_name: mongodb
     image: mongo
@@ -23,7 +23,7 @@ services:
     volumes:
       - mongodb_data:/data/db
 
-  backend:
+  back-end:
     container_name: backend-container
     # build:
     #   context: ./server/video-editing-api/video-editing-api
@@ -38,5 +38,8 @@ services:
   
 networks:
   video-analysis:
+    driver: bridge
+    
 volumes:
   mongodb_data:
+  
