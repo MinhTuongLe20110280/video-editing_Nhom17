@@ -43,9 +43,9 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ec2-18-204-221-190.compute-1.amazonaws.com
+          username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo ${{ secrets.SSH_PRIVATE_KEY }}
             sudo su
             cd compose
             docker compose down
