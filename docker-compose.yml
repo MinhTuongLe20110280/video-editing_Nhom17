@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  front-end:
+  frontend:
     container_name: frontend-container
     build:
       context: ./client/client
