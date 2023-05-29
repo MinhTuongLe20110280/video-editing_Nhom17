@@ -18,3 +18,5 @@ docker compose up --build
 ```
 
 ## B5: Truy cập vào đường dẫn: http://localhost:3000/login để vào giao diện ứng dụng
+
+## B6: Truy cập và đường dẫn: http://localhost:5001/swagger/index.html để vào giao diện swagger của backend
