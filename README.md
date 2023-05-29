@@ -1,5 +1,3 @@
-# Link ứng dụng đã deploy: http://3.92.184.220:3000/login (Chỉ cần truy cập vào link này là sẽ sử dụng được app vì đã deploy tự động tích hợp cả FE BE và mongoDB)
-# Link swagger deploy Backend: http://3.92.184.220:5001/swagger/index.html
 
 # Hướng dẫn tải và chạy ứng dụng bằng Docker Compose
 
