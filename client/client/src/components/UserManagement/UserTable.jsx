@@ -4,6 +4,9 @@ import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import "../VideoInput/table-video.css";
 import "antd/dist/antd.css";
+import { userApi } from "../../api";
+import { Alert, Snackbar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function UserTable(props) {
   const { data, videos, images } = props;
@@ -12,6 +15,13 @@ function UserTable(props) {
   const [searchedColumn, setSearchedColumn] = useState();
   const [users, setData] = useState([]);
   const [temp, setTemp] = useState({});
+
+  const [Id, setId] = useState();
+
+  const [noti, setNoti] = useState(false);
+  const [message, setMessage] = useState();
+  const [typeNoti, setTypeNoti] = useState();
+  let navigate = useNavigate();
 
   useEffect(() => {
     // Set the initial users data when props.data changes
@@ -149,14 +159,19 @@ function UserTable(props) {
         const matchingUser = users.find(
           (user) => user.userName === record.userName
         );
-        const isAdmin = matchingUser ? matchingUser.emailConfirmed : true;
+
+        const isAdmin = matchingUser ? matchingUser.isAdmin : true;
+
 
         const handleCheckboxChange = () => {
           const newData = users.map((user) => {
             if (user.userName === record.userName) {
-              const temp  = { ...user, emailConfirmed: !isAdmin }
-              setTemp(temp)
-              return temp
+
+              const temp = { ...user, isAdmin: !isAdmin };
+              setTemp(temp);
+              setId(temp.id);
+              return temp;
+
             }
             return user;
           });
@@ -201,16 +216,64 @@ function UserTable(props) {
     return `Total: ${total} users`;
   };
 
-  const handleSave = () => {
-    console.log(temp)
-  }
+
+
+  const handleSave = async () => {
+    try {
+      const updatedProfile = {
+        isAdmin: temp.isAdmin,
+      };
+  
+      const currentUsername = localStorage.getItem("username");
+  
+      
+      if (currentUsername === temp.userName) {
+        await userApi.updateUserAccount(Id, updatedProfile);
+        setNoti(true);
+        setMessage("Update Succeed");
+        setTypeNoti("success");
+        navigate("/"); 
+        window.location.reload();
+      } else {
+        await userApi.updateUserAccount(Id, updatedProfile);
+        setNoti(true);
+        setMessage("Update Succeed");
+        setTypeNoti("success");
+        window.location.reload();
+      }
+  
+     
+    } catch (error) {
+      setNoti(true);
+      setMessage(error.response.data.description);
+      setTypeNoti("error");
+    }
+  };
+  
+
   return (
-    <Table
-      bordered
-      pagination={{ showTotal: showTotal, showSizeChanger: true }}
-      columns={columns}
-      dataSource={users.map((item, index) => ({ ...item, key: index }))}
-    />
+    <>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={noti}
+        autoHideDuration={5000}
+        onClose={() => setNoti(false)}
+      >
+        <Alert
+          onClose={() => setNoti(false)}
+          severity={typeNoti}
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
+      <Table
+        bordered
+        pagination={{ showTotal: showTotal, showSizeChanger: true }}
+        columns={columns}
+        dataSource={users.map((item, index) => ({ ...item, key: index }))}
+      />
+    </>
   );
 }
 

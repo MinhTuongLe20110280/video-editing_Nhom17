@@ -194,6 +194,7 @@ namespace video_editing_api.Controllers
                 return BadRequest(new Response<string>(400, e.Message, null));
             }
         }
+
         [HttpPost("notConcatHighlight")]
         public async Task<IActionResult> NotConcatVideo(ConcatModel concatModel)
         {

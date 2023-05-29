@@ -148,8 +148,8 @@ function TableHighlight(props) {
           );
         } else if (row.status === 2) {
           return (
-            <Tag icon={<CloseCircleOutlined />} color="error">
-              error
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              Success
             </Tag>
           );
         }

@@ -8,6 +8,7 @@ import { Alert, Snackbar } from "@mui/material";
 const AccountManagement = () => {
   const currentUsername = localStorage.getItem("username");
   const [Id, setId] = useState();
+  const [IsAdmin, setIsAdmin] = useState();
   const [Username, setUsername] = useState(currentUsername);
   const [Fullname, setFullname] = useState();
   const [Email, setEmail] = useState();
@@ -21,11 +22,13 @@ const AccountManagement = () => {
   const [message, setMessage] = useState();
   const [typeNoti, setTypeNoti] = useState();
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await userApi.getUserByUsername(currentUsername);
         setId(response.id);
+        setIsAdmin(response.isAdmin)
       } catch (error) {
         console.log(error);
       }
@@ -85,6 +88,7 @@ const AccountManagement = () => {
           email: Email,
           phoneNumber: Phonenumber,
           fullName: Fullname,
+          isAdmin: IsAdmin
         };
 
         await userApi.updateUserAccount(Id, updatedProfile);
