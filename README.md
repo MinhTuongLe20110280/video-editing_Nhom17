@@ -1,4 +1,3 @@
-Cách cài đặt package để chạy front-end: Vào client chạy lệnh npm install --legacy-peer-deps
 
 # Hướng dẫn tải và chạy ứng dụng bằng Docker Compose
 
