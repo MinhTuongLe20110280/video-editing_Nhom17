@@ -2,10 +2,10 @@ version: "3.8"
 services:
   frontend:
     container_name: frontend-container
-    # build:
-    #   context: ./client/client
-    #   dockerfile: dockerfile
-    image: lamnguyen0206/frontend
+    build:
+      context: ./client/client
+      dockerfile: dockerfile
+    #image: lamnguyen0206/frontend
     ports:
       - "3000:80"
     networks:
